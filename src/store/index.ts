@@ -1,8 +1,7 @@
 import { createStore } from "vuex";
+import { IRootState } from "./interfaces";
+import characters from "./modules/characters";
 
-export default createStore({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+export default createStore<IRootState>({
+  modules: { characters },
 });

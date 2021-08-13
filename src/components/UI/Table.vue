@@ -31,7 +31,7 @@
         <td class="table__data">{{ item.species }}</td>
         <td class="table__data">{{ lastEpisode(item.episode) }}</td>
         <td class="table__data">
-          <button class="table__button">
+          <button class="button table__button">
             <star-icon></star-icon>
             <span class="visually-hidden"> Add to favorites </span>
           </button>

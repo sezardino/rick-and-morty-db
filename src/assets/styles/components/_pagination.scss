@@ -18,28 +18,6 @@
   &__button {
     width: 40px;
     height: 40px;
-
-    cursor: pointer;
-
-    font-weight: var(--fw-medium);
-    font-size: var(--fz-xs);
-    line-height: var(--lh-sm);
-
-    color: var(--color-gray);
-
-    background-color: transparent;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--color-gray);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &__button--current {
-    background-color: var(--color-aqua);
-    color: var(--color-white);
-    border-color: var(--color-aqua);
   }
 
   &__icon {

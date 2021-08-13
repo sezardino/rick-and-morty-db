@@ -17,6 +17,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Loader",
+  name: "my-loader",
 });
 </script>

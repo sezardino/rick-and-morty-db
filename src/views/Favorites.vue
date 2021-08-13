@@ -1,4 +1,7 @@
-<template>Favorites</template>
+<template>
+  <my-table></my-table>
+  <my-pagination></my-pagination>
+</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";

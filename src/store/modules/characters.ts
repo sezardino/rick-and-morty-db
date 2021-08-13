@@ -3,9 +3,9 @@ import { mockData } from "@/helpers/const";
 import {
   ActionContextType,
   CharactersStateTypes,
-  ICharacter,
   IRootState,
 } from "../interfaces";
+import { ICharacter } from "@/interfaces";
 
 const characters: Module<CharactersStateTypes, IRootState> = {
   namespaced: true,

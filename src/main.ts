@@ -7,6 +7,7 @@ import "@/assets/styles/index.scss";
 
 import Layouts from "@/layouts";
 import UIComponents from "@/components/UI";
+import Icons from "@/components/icons";
 
 const app = createApp(App);
 
@@ -15,6 +16,9 @@ Layouts.forEach((layout) => {
 });
 UIComponents.forEach((layout) => {
   app.component(layout.name, layout);
+});
+Icons.forEach((icon) => {
+  app.component(icon.name, icon);
 });
 
 app.use(store);

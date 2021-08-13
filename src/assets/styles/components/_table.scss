@@ -32,7 +32,12 @@
   &__head-data {
     font-weight: var(--fw-medium);
 
-    padding: 16px 8px;
+    padding: 18px 0;
+
+    @include breakpoint-down("lg") {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
   }
 
   &__body {
@@ -43,7 +48,7 @@
 
   &__data {
     font-weight: var(--fw-regular);
-    padding: 8px 5px;
+    padding: 6px 0;
   }
 
   &__data--empty {

@@ -1,10 +1,10 @@
-<template>Home</template>
+<template>Favorites</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Home",
+  name: "Favorites",
   components: {},
 });
 </script>

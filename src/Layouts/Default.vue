@@ -1,10 +1,12 @@
-<template>Home</template>
+<template>
+  1111111
+  <slot />
+</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Home",
-  components: {},
+  name: "default-layout",
 });
 </script>

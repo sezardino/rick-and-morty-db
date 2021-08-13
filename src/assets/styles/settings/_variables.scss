@@ -8,9 +8,25 @@
 
   --color-white: #ffffff;
   --color-gray: #a9b1bd;
+  --color-light: #e5eaf4;
   --color-light-gray: rgba(229, 234, 244, 0.25);
   --color-aqua: #11b0c8;
 
   --fw-regular: 400;
   --fw-medium: 500;
+
+  --transition-standard: 0.6s;
+  --border-radius: 12px;
+
+  --gutters: 140px;
+
+  @include breakpoint-down("xl") {
+    --gutters: 100px;
+  }
+  @include breakpoint-down("md") {
+    --gutters: 50px;
+  }
+  @include breakpoint-down("sm") {
+    --gutters: 20px;
+  }
 }

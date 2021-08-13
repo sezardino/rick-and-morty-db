@@ -1,0 +1,101 @@
+.table {
+  width: 100%;
+
+  min-width: 865px;
+  overflow: auto;
+
+  font-size: var(--fz-xs);
+  line-height: var(--lh-xs);
+
+  color: var(--color-gray);
+
+  border-collapse: collapse;
+
+  &__head {
+    text-align: left;
+    vertical-align: initial;
+  }
+
+  &__row {
+  }
+
+  &__img {
+    width: 43px;
+    height: 68px;
+    object-fit: cover;
+  }
+
+  &__row--head {
+    background-color: var(--color-light-gray);
+  }
+
+  &__head-data {
+    font-weight: var(--fw-medium);
+
+    padding: 16px 8px;
+  }
+
+  &__body {
+    .table__row {
+      border-bottom: 1px solid var(--color-light);
+    }
+  }
+
+  &__data {
+    font-weight: var(--fw-regular);
+    padding: 8px 5px;
+  }
+
+  &__data--empty {
+    width: var(--gutters);
+    @include breakpoint-down("lg") {
+      width: 0;
+    }
+  }
+
+  &__img {
+    vertical-align: middle;
+  }
+
+  &__button {
+    width: 43px;
+    height: 43px;
+
+    font-weight: var(--fw-medium);
+    font-size: var(--fz-xs);
+    line-height: var(--lh-sm);
+
+    color: var(--color-gray);
+
+    background-color: transparent;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--color-aqua);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    transition: var(--transition-standard) background-color,
+      border-color ease-in-out;
+
+    svg path {
+      transition: var(--transition-standard) fill ease-in-out;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--color-gray);
+      border-color: var(--color-gray);
+
+      svg path {
+        fill: var(--color-white);
+      }
+    }
+  }
+  &__icon {
+    vertical-align: bottom;
+  }
+}

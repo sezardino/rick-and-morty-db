@@ -2,6 +2,8 @@ export const LAYOUTS = {
   DEFAULT: "default",
 };
 
+export const PER_PAGE = 8;
+
 export const mockData = [
   {
     name: "Aqua Morty",

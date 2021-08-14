@@ -10,7 +10,6 @@ export interface CharactersStateTypes {
   pageData: ICharacter[] | [];
   currentPage: number;
   totalPages: number;
-  loadedPages: number;
 }
 
 export type ActionContextType = {

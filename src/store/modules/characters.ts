@@ -9,11 +9,13 @@ import { ICharacter } from "@/interfaces";
 
 import gqlApi from "@/api/gqlApi";
 import { getItemsInIDRange } from "@/helpers/functions";
+import lsApi from "@/api/ls";
 
 const characters: Module<CharactersStateTypes, IRootState> = {
   namespaced: true,
   state: {
     all: [],
+    favorites: [],
     pageData: [],
     currentPage: 1,
     totalPages: 0,
@@ -36,6 +38,19 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     currentPage(state, payload) {
       state.currentPage = payload;
     },
+    addFavorite(state, payload: any) {
+      if (payload.length) {
+        state.favorites = [...state.favorites, ...payload];
+      } else {
+        const needed = payload as never;
+        state.favorites.push(needed);
+      }
+    },
+    removeFavorite(state, payload) {
+      state.favorites = state.favorites.filter(
+        (item) => item.id !== payload.id
+      );
+    },
   },
   getters: {
     all(state) {
@@ -50,14 +65,19 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     totalPages(state) {
       return state.totalPages;
     },
+    favorites(state) {
+      return state.favorites;
+    },
   },
   actions: {
     async init({ commit, dispatch }: ActionContextType) {
       const count = await gqlApi.getCount();
+      const favorites = await lsApi.getData();
       const pagesCount = Math.floor(count / PER_PAGE);
-      commit("totalPages", pagesCount);
       await dispatch("getCharacters");
       dispatch("currentPage");
+      commit("totalPages", pagesCount);
+      commit("addFavorite", favorites);
     },
 
     async getCharacters({ commit }: ActionContextType, page?: number) {
@@ -92,6 +112,18 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       }
 
       commit("currentPage", page);
+    },
+
+    favoriteHandler({ commit, getters }: ActionContextType, payload) {
+      if (
+        getters.favorites.find((item: ICharacter) => item.id === payload.id)
+      ) {
+        commit("removeFavorite", payload);
+      } else {
+        commit("addFavorite", payload);
+      }
+
+      lsApi.saveData(getters.favorites);
     },
   },
 };

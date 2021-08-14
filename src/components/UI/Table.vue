@@ -19,7 +19,13 @@
         <tr class="table__row" v-for="item in data" :key="item.id">
           <td class="table__data--empty"></td>
           <td class="table__data">
-            <img class="table__img" :src="item.image" :alt="item.name" />
+            <div class="table__img-wrapper">
+              <favorite-icon
+                class="table__favorite"
+                v-if="isFavorite(item.id)"
+              ></favorite-icon>
+              <img class="table__img" :src="item.image" :alt="item.name" />
+            </div>
           </td>
           <td class="table__data">{{ item.id }}</td>
           <td class="table__data">{{ item.name }}</td>
@@ -33,7 +39,12 @@
           <td class="table__data">{{ item.species }}</td>
           <td class="table__data">{{ lastEpisode(item.episode) }}</td>
           <td class="table__data">
-            <button class="button table__button">
+            <button
+              :class="`button table__button ${
+                isFavorite(item.id) ? 'button--active' : ''
+              }`"
+              @click.prevent="$emit('addFavorite', item)"
+            >
               <star-icon></star-icon>
               <span class="visually-hidden"> Add to favorites </span>
             </button>
@@ -54,8 +65,10 @@ export default defineComponent({
   name: "my-table",
   props: {
     data: Array,
+    favorites: Array,
     emptyLabel: { type: String, required: true },
   },
+  emits: ["addFavorite"],
 
   methods: {
     lastEpisode(episodes: Array<IEpisode>) {
@@ -63,6 +76,14 @@ export default defineComponent({
     },
     genderIcon(gender: string) {
       return gender.toLowerCase() + "-icon";
+    },
+    isFavorite(id: string) {
+      console.log(this.favorites);
+      if (this.favorites!.find((item: any) => item.id === id)) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 });

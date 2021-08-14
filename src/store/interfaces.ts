@@ -7,6 +7,7 @@ export interface IRootState {
 
 export interface CharactersStateTypes {
   all: ICharacter[] | [];
+  favorites: ICharacter[] | [];
   pageData: ICharacter[] | [];
   currentPage: number;
   totalPages: number;

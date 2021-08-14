@@ -5,6 +5,8 @@
     <my-table
       emptyLabel="The are no data to display"
       :data="pageData"
+      :favorites="favorites"
+      @addFavorite="favoriteHandler"
     ></my-table>
     <my-pagination
       :current="currentPage"
@@ -16,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import { ICharacter } from "@/interfaces";
 import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 
@@ -29,11 +32,15 @@ export default defineComponent({
       pageData: "characters/pageData",
       currentPage: "characters/currentPage",
       totalPages: "characters/totalPages",
+      favorites: "characters/favorites",
     }),
   },
   methods: {
     pageChangeHaldler(page: number) {
       this.$store.dispatch("characters/currentPage", page);
+    },
+    favoriteHandler(item: ICharacter) {
+      this.$store.dispatch("characters/favoriteHandler", item);
     },
   },
   watch: {

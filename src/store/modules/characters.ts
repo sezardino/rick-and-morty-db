@@ -20,7 +20,7 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     totalPages: 0,
   },
   mutations: {
-    all(state, payload: ICharacter[]) {
+    addToAll(state, payload: ICharacter[]) {
       state.all = [...state.all, ...payload];
     },
     loadedPages(state, payload: number) {
@@ -49,6 +49,9 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     totalPages(state) {
       return state.totalPages;
     },
+    loadedPages(state) {
+      return state.loadedPages;
+    },
   },
   actions: {
     async init({ commit, dispatch }: ActionContextType) {
@@ -62,10 +65,13 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       const { characters, page: loadedPage } = await gqlApi.getCharacters(page);
 
       commit("loadedPages", loadedPage);
-      commit("all", characters);
+      commit("addToAll", characters);
     },
 
-    async currentPage({ commit, getters }: ActionContextType, page = 1) {
+    async currentPage(
+      { commit, dispatch, getters }: ActionContextType,
+      page = 1
+    ) {
       if (page !== getters.currentPage) {
         commit("currentPage", page);
       }
@@ -75,14 +81,18 @@ const characters: Module<CharactersStateTypes, IRootState> = {
         limit: PER_PAGE,
         items: getters.all,
       });
+
       if (items.length === PER_PAGE) {
         commit("pageData", items);
       } else if (items.length < PER_PAGE) {
-        // await
+        await dispatch("getCharacters", getters.loadedPages + 1);
+        dispatch("currentPage", current);
       } else {
         // last page
         console.log("last");
       }
+
+      commit("currentPage", page);
     },
   },
 };

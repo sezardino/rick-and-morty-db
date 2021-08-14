@@ -1,5 +1,5 @@
 import { Module } from "vuex";
-import { mockData } from "@/helpers/const";
+import { PER_PAGE } from "@/helpers/const";
 import {
   ActionContextType,
   CharactersStateTypes,
@@ -7,29 +7,77 @@ import {
 } from "../interfaces";
 import { ICharacter } from "@/interfaces";
 
+import gqlApi from "@/api/gqlApi";
+import { getItemsInIDRange } from "@/helpers/functions";
+
 const characters: Module<CharactersStateTypes, IRootState> = {
   namespaced: true,
   state: {
     all: [],
-    favorites: [],
+    pageData: [],
+    currentPage: 1,
+    loadedPages: 0,
+    totalPages: 0,
   },
   mutations: {
     all(state, payload: ICharacter[]) {
-      state.all = payload;
+      state.all = [...state.all, ...payload];
+    },
+    loadedPages(state, payload: number) {
+      state.loadedPages = payload;
+    },
+    totalPages(state, payload: number) {
+      state.totalPages = payload;
+    },
+    pageData(state, payload) {
+      state.pageData = payload;
     },
   },
   getters: {
     all(state) {
       return state.all;
     },
-    favorites(state) {
-      return state.favorites;
+    currentPage(state) {
+      return state.currentPage;
+    },
+    pageData(state) {
+      return state.pageData;
+    },
+    totalPages(state) {
+      return state.totalPages;
     },
   },
   actions: {
-    getAllCharacters({ commit }: ActionContextType) {
-      commit("all", mockData);
-      return mockData;
+    async init({ commit, dispatch }: ActionContextType) {
+      const count = await gqlApi.getCount();
+      commit("totalPages", count);
+      await dispatch("getCharacters");
+      dispatch("currentPage");
+    },
+
+    async getCharacters({ commit }: ActionContextType, page?: number) {
+      const { characters, page: loadedPage } = await gqlApi.getCharacters(page);
+
+      commit("loadedPages", loadedPage);
+      commit("all", characters);
+    },
+
+    async currentPage({ commit, getters }: ActionContextType) {
+      const items = getItemsInIDRange({
+        page: getters.currentPage,
+        limit: PER_PAGE,
+        items: getters.all,
+      });
+
+      if (items.length === PER_PAGE) {
+        commit("pageData", items);
+        return;
+      } else if (items.length < PER_PAGE) {
+        // await
+      } else {
+        // last page
+        console.log("last");
+      }
     },
   },
 };

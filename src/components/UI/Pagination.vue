@@ -66,7 +66,6 @@ export default defineComponent({
 
   methods: {
     clickHandler(index: number) {
-      console.log(index);
       this.$emit("pageChange", index);
     },
   },

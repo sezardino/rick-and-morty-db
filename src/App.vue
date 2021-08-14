@@ -13,6 +13,13 @@ export default defineComponent({
       return this.$route.meta.layout;
     },
   },
+  async mounted() {
+    try {
+      await this.$store.dispatch("characters/init");
+    } catch (error) {
+      console.log(error);
+    }
+  },
   // setup() {
 
   // },

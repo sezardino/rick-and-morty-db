@@ -36,7 +36,7 @@ class Api {
   async getCharacters(page = 1) {
     const data = await this.getData(pageQuery(page));
 
-    return { characters: data.data.characters.results, page };
+    return data.data.characters.results;
   }
 }
 

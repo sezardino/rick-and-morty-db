@@ -16,15 +16,16 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     all: [],
     pageData: [],
     currentPage: 1,
-    loadedPages: 0,
     totalPages: 0,
   },
   mutations: {
     addToAll(state, payload: ICharacter[]) {
-      state.all = [...state.all, ...payload];
-    },
-    loadedPages(state, payload: number) {
-      state.loadedPages = payload;
+      const filtered = payload.filter((payloadItem) => {
+        if (!state.all.find((item) => item.id === payloadItem.id)) {
+          return payloadItem;
+        }
+      });
+      state.all = [...state.all, ...filtered];
     },
     totalPages(state, payload: number) {
       state.totalPages = payload;
@@ -49,22 +50,19 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     totalPages(state) {
       return state.totalPages;
     },
-    loadedPages(state) {
-      return state.loadedPages;
-    },
   },
   actions: {
     async init({ commit, dispatch }: ActionContextType) {
       const count = await gqlApi.getCount();
-      commit("totalPages", count);
+      const pagesCount = Math.floor(count / PER_PAGE);
+      commit("totalPages", pagesCount);
       await dispatch("getCharacters");
       dispatch("currentPage");
     },
 
     async getCharacters({ commit }: ActionContextType, page?: number) {
-      const { characters, page: loadedPage } = await gqlApi.getCharacters(page);
+      const characters = await gqlApi.getCharacters(page);
 
-      commit("loadedPages", loadedPage);
       commit("addToAll", characters);
     },
 
@@ -82,14 +80,15 @@ const characters: Module<CharactersStateTypes, IRootState> = {
         items: getters.all,
       });
 
-      if (items.length === PER_PAGE) {
+      if (
+        items.length === PER_PAGE ||
+        (getters.totalPages === current && items.length)
+      ) {
         commit("pageData", items);
       } else if (items.length < PER_PAGE) {
-        await dispatch("getCharacters", getters.loadedPages + 1);
+        const neededPage = Math.ceil((current * PER_PAGE) / 20);
+        await dispatch("getCharacters", neededPage);
         dispatch("currentPage", current);
-      } else {
-        // last page
-        console.log("last");
       }
 
       commit("currentPage", page);

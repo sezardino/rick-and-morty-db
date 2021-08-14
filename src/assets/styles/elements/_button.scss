@@ -31,7 +31,6 @@
   }
 
   &:hover,
-  &:focus,
   &:active {
     &:not(:disabled) {
       background-color: var(--color-gray);

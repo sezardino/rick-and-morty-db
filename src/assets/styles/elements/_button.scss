@@ -47,5 +47,9 @@
     background-color: var(--color-aqua);
     color: var(--color-white);
     border-color: var(--color-aqua);
+
+    svg path {
+      fill: var(--color-white);
+    }
   }
 }

@@ -65,6 +65,18 @@
     }
   }
 
+  &__img-wrapper {
+    position: relative;
+  }
+
+  &__favorite {
+    position: absolute;
+    top: 0;
+    right: 50%;
+
+    transform: translateX(100%);
+  }
+
   &__img {
     vertical-align: middle;
   }

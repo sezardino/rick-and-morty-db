@@ -2,7 +2,10 @@
   <my-loader v-if="loading"></my-loader>
   <section v-else>
     <h1 class="visually-hidden">All Characters</h1>
-    <my-table :data="pageData"></my-table>
+    <my-table
+      emptyLabel="The are no data to display"
+      :data="pageData"
+    ></my-table>
     <my-pagination
       :current="currentPage"
       :show="7"
@@ -33,14 +36,18 @@ export default defineComponent({
       this.$store.dispatch("characters/currentPage", page);
     },
   },
-  async mounted() {
-    try {
-      await this.$store.dispatch("characters/init");
+  watch: {
+    pageData() {
       this.loading = false;
-    } catch (error) {
-      console.log(error);
+    },
+    currentPage() {
+      this.loading = true;
+    },
+  },
+  mounted() {
+    if (this.pageData.length) {
+      this.loading = false;
     }
   },
-  watch: {},
 });
 </script>

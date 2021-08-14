@@ -1,15 +1,22 @@
 .table {
-  width: 100%;
-
-  min-width: 865px;
-  overflow: auto;
-
   font-size: var(--fz-xs);
   line-height: var(--lh-xs);
 
   color: var(--color-gray);
 
-  border-collapse: collapse;
+  &__info {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  &__table {
+    width: 100%;
+
+    min-width: 865px;
+    overflow: auto;
+
+    border-collapse: collapse;
+  }
 
   &__head {
     text-align: left;

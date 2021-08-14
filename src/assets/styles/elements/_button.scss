@@ -19,17 +19,28 @@
 
   svg path {
     transition: var(--transition-standard) fill ease-in-out;
+    fill: var(--color-aqua);
+  }
+
+  &:disabled {
+    cursor: initial;
+    svg path {
+      transition: var(--transition-standard) fill ease-in-out;
+      fill: var(--color-gray);
+    }
   }
 
   &:hover,
   &:focus,
   &:active {
-    background-color: var(--color-gray);
-    border-color: var(--color-gray);
-    color: var(--color-white);
+    &:not(:disabled) {
+      background-color: var(--color-gray);
+      border-color: var(--color-gray);
+      color: var(--color-white);
 
-    svg path {
-      fill: var(--color-white);
+      svg path {
+        fill: var(--color-white);
+      }
     }
   }
 

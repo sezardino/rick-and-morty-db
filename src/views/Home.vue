@@ -5,8 +5,9 @@
     <my-table :data="pageData"></my-table>
     <my-pagination
       :current="currentPage"
-      :show="6"
+      :show="7"
       :total="totalPages"
+      @pageChange="pageChangeHaldler"
     ></my-pagination>
   </section>
 </template>
@@ -26,6 +27,11 @@ export default defineComponent({
       currentPage: "characters/currentPage",
       totalPages: "characters/totalPages",
     }),
+  },
+  methods: {
+    pageChangeHaldler(page: number) {
+      this.$store.dispatch("characters/currentPage", page);
+    },
   },
   async mounted() {
     try {

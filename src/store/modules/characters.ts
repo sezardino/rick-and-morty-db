@@ -32,6 +32,9 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     pageData(state, payload) {
       state.pageData = payload;
     },
+    currentPage(state, payload) {
+      state.currentPage = payload;
+    },
   },
   getters: {
     all(state) {
@@ -62,16 +65,18 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       commit("all", characters);
     },
 
-    async currentPage({ commit, getters }: ActionContextType) {
+    async currentPage({ commit, getters }: ActionContextType, page = 1) {
+      if (page !== getters.currentPage) {
+        commit("currentPage", page);
+      }
+      const current = page === getters.currentPage ? getters.currentPage : page;
       const items = getItemsInIDRange({
-        page: getters.currentPage,
+        page: current,
         limit: PER_PAGE,
         items: getters.all,
       });
-
       if (items.length === PER_PAGE) {
         commit("pageData", items);
-        return;
       } else if (items.length < PER_PAGE) {
         // await
       } else {

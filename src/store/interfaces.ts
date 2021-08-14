@@ -18,3 +18,10 @@ export type ActionContextType = {
   commit: Commit;
   getters: any;
 };
+
+export type PaginationType = {
+  id: string;
+  value: number | null;
+  label: string;
+  disabled: boolean;
+};

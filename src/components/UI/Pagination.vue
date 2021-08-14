@@ -2,22 +2,22 @@
   <div class="pagination">
     <ul class="pagination__list">
       <li class="pagination__item">
-        <button class="button pagination__button" :disabled="current === 1">
+        <button
+          class="button pagination__button"
+          :disabled="current === 1"
+          @click="clickHandler(current - 1)"
+        >
           <pagination-icon class="pagination__icon"></pagination-icon>
           <span class="visually-hidden">Previous page</span>
         </button>
       </li>
-      <li
-        class="pagination__item"
-        v-for="item in pagination"
-        :key="item.id"
-        @click="clickHandler(item.label)"
-      >
+      <li class="pagination__item" v-for="item in pagination" :key="item.id">
         <button
           :class="`button pagination__button ${
-            item.label == current ? 'button--active' : ''
+            item.value === current ? 'button--active' : ''
           }`"
           :disabled="item.disabled"
+          @click="clickHandler(item.value)"
         >
           <span class="visually-hidden" v-if="!item.disabled">
             To page number:
@@ -26,7 +26,11 @@
         </button>
       </li>
       <li class="pagination__item">
-        <button class="button pagination__button" :disabled="current === total">
+        <button
+          class="button pagination__button"
+          :disabled="current === total"
+          @click="clickHandler(current + 1)"
+        >
           <pagination-icon class="pagination__icon pagination__icon--next">
           </pagination-icon>
           <span class="visually-hidden">Next page</span>
@@ -56,12 +60,13 @@ export default defineComponent({
   emits: ["pageChange"],
   computed: {
     pagination() {
-      return createPaginationArr(this.total!, this.show!);
+      return createPaginationArr(this.total!, this.show!, this.current!);
     },
   },
 
   methods: {
-    clickHandler(index: string) {
+    clickHandler(index: number) {
+      console.log(index);
       this.$emit("pageChange", index);
     },
   },

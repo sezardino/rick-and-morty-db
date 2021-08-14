@@ -1,4 +1,5 @@
 import { IEpisode, ICharacter } from "@/interfaces";
+import { PaginationType } from "@/store/interfaces";
 
 export const generateId = () => "id-" + Math.random().toString(36).substr(2, 9);
 
@@ -37,28 +38,93 @@ export const getItemsInIDRange = ({
   return neededItems;
 };
 
-export const createPaginationArr = (total: number, show: number) => {
+// PAGINATION
+
+const generateItem = (value: number): PaginationType => ({
+  id: generateId(),
+  value: value,
+  label: value.toString(),
+  disabled: false,
+});
+
+const editToDotsItem = (item: PaginationType) => {
+  item.label = "...";
+  item.value = 0;
+  item.disabled = true;
+};
+
+const editLabelAndValueItem = (item: PaginationType, value: number) => {
+  item.label = value.toString();
+  item.value = value;
+};
+
+export const createPaginationArr = (
+  total: number,
+  show: number,
+  current: number
+) => {
   let length: number;
+
   if (total >= show) {
     length = show;
   } else if (total === 0) {
-    // numbers of pages === 0
     length = 1;
   } else {
     length = total;
   }
-  const numbersArr = [...Array(length).keys()].map((i) => i + 1);
-  const pagination = numbersArr.map((item, index) => {
-    const value = { id: generateId(), label: item.toString(), disabled: false };
 
-    if (index + 1 === length) {
-      value.label = total.toString();
-    } else if (index + 1 === length - 1 && length === show) {
-      value.label = "...";
-      value.disabled = true;
-    }
+  let pagination: PaginationType[] | number[] | [] = [];
+  let cases: (item: PaginationType, index: number) => void;
 
-    return value;
+  switch (true) {
+    case current === 1 || current === 2:
+      pagination = [...Array(length).keys()].map((item) => item + 1);
+      cases = (item, index) => {
+        if (index + 1 === length) {
+          editLabelAndValueItem(item, total);
+        } else if (index + 1 === length - 1) {
+          editToDotsItem(item);
+        }
+      };
+      break;
+    case current === total || current === total - 1:
+      pagination = [...Array(length).keys()].map(
+        (_, index, arr) => total - arr.length + 1 + index
+      );
+      cases = (item, index) => {
+        if (index === 0) {
+          editLabelAndValueItem(item, 1);
+        } else if (index === 1) {
+          editToDotsItem(item);
+        }
+      };
+      break;
+
+    default:
+      pagination = [...Array(length).keys()].map((item) => item + 1);
+      cases = (item, index) => {
+        if (index === 0) {
+          editLabelAndValueItem(item, 1);
+        } else if (index === length - 1) {
+          editLabelAndValueItem(item, total);
+        } else if (index === 1 || index + 1 === length - 1) {
+          editToDotsItem(item);
+        } else if (index === 3) {
+          editLabelAndValueItem(item, current);
+        } else if (index === 2) {
+          editLabelAndValueItem(item, current - 1);
+        } else if (index === 4) {
+          editLabelAndValueItem(item, current + 1);
+        }
+      };
+      break;
+  }
+
+  pagination.forEach((pageData, index) => {
+    const item = generateItem(pageData);
+    cases(item, index);
+
+    pagination[index] = item;
   });
 
   return pagination;

@@ -9,6 +9,12 @@
   width: 100%;
   max-width: 505px;
 
+  transition: var(--transition-standard) box-shadow ease-in-out;
+
+  &:focus-within {
+    box-shadow: 0 0 30px var(--color-aqua);
+  }
+
   @include breakpoint-down("xl") {
     max-width: 400px;
   }
@@ -33,10 +39,6 @@
     &:focus,
     &:active {
       outline: none;
-      &,
-      .search-form {
-        box-shadow: 0 0 30px var(--color-aqua);
-      }
     }
   }
 

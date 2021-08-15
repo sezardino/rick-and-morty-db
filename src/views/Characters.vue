@@ -2,17 +2,17 @@
   <app-error-boundary :error="error">
     <my-loader v-if="loading"></my-loader>
     <section v-else>
-      <h1 class="visually-hidden">Favorite characters</h1>
+      <h1 class="visually-hidden">All Characters</h1>
       <my-table
-        emptyLabel="The are no favorite characters, add some on all characters page"
+        emptyLabel="The are no data to display"
         :data="pageData"
-        :favorites="pageData"
+        :favorites="favorites"
         @addFavorite="favoriteHandler"
       ></my-table>
       <my-pagination
         :show="paginationToShow"
         :total="totalPages"
-        linkPath="favorites"
+        linkPath="characters"
         :pageChangeHandler="pageChangeHaldler"
       >
       </my-pagination>
@@ -27,33 +27,51 @@ import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
-  name: "Favorites",
   components: { AppErrorBoundary },
+  name: "Home",
   data() {
     return { loading: true, error: false };
   },
-
   computed: {
     ...mapGetters({
-      pageData: "favorites/pageData",
-      currentPage: "favorites/currentPage",
-      totalPages: "favorites/totalPages",
+      pageData: "characters/pageData",
+      currentPage: "characters/currentPage",
+      totalPages: "characters/totalPages",
+      favorites: "favorites/allItems",
       paginationToShow: "app/paginationToShow",
     }),
   },
-
   methods: {
+    pageCheck(page: string) {
+      const pageNum = +page;
+      if (!pageNum || pageNum <= 0 || pageNum >= this.totalPages) {
+        this.$router.push("/404");
+        this.loading = false;
+        return false;
+      } else {
+        return true;
+      }
+    },
     pageChangeHaldler(page: number) {
-      this.$store.dispatch("favorites/currentPageChange", page);
+      this.$store.dispatch("characters/currentPageChange", page);
     },
     favoriteHandler(item: ICharacter) {
       this.$store.dispatch("favorites/favoriteHandler", item);
     },
   },
+  watch: {
+    pageData() {
+      this.loading = false;
+    },
+    currentPage() {
+      this.loading = true;
+    },
+  },
   async mounted() {
-    const page = this.$route.params.page;
+    const page = this.$route.params.page as string;
     try {
-      await this.$store.dispatch("favorites/currentPageChange", page);
+      await this.$store.dispatch("characters/init", page);
+      this.pageCheck(page);
       this.loading = false;
     } catch (error) {
       this.error = true;

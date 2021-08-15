@@ -1,19 +1,39 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "@/views/Home.vue";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 import { LAYOUTS } from "@/helpers/const";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Home",
+    name: "Rick and Morty DataBase",
     meta: { layout: LAYOUTS.DEFAULT },
     component: Home,
   },
   {
-    path: "/favorites",
-    name: "Favorites",
+    path: "/search",
+    name: "Search",
     meta: { layout: LAYOUTS.DEFAULT },
+    component: () => import("@/views/Search.vue"),
+  },
+  {
+    path: "/favorites",
+    redirect: "/favorites/1",
+  },
+  {
+    path: "/characters",
+    redirect: "/characters/1",
+  },
+  {
+    path: "/characters/:page",
+    name: "All Characters",
+    meta: { layout: LAYOUTS.DEFAULT, inNav: true },
+    component: () => import("@/views/Characters.vue"),
+  },
+  {
+    path: "/favorites/:page",
+    name: "Favorites",
+    meta: { layout: LAYOUTS.DEFAULT, inNav: true },
     component: () => import("@/views/Favorites.vue"),
   },
   {
@@ -29,7 +49,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  document.title = to.name as string;
+  const name = to.name as string;
+  if (to.params.page) {
+    document.title = `Page ${to.params.page} | ${name}`;
+  } else {
+    document.title = to.name as string;
+  }
   next();
 });
 

@@ -60,8 +60,10 @@ export default defineComponent({
     },
   },
   watch: {
-    pageData() {
-      this.loading = false;
+    pageData(newValue) {
+      if (newValue) {
+        this.loading = false;
+      }
     },
     currentPage() {
       this.loading = true;
@@ -72,7 +74,6 @@ export default defineComponent({
     try {
       await this.$store.dispatch("characters/init", page);
       this.pageCheck(page);
-      this.loading = false;
     } catch (error) {
       this.error = true;
     }

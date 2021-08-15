@@ -21,8 +21,10 @@
           <td class="table__data">
             <div class="table__img-wrapper">
               <favorite-icon
-                class="table__favorite"
-                v-if="isFavorite(item.id)"
+                :class="{
+                  table__favorite: true,
+                  'table__favorite--active': isFavorite(item.id),
+                }"
               ></favorite-icon>
               <img class="table__img" :src="item.image" :alt="item.name" />
             </div>

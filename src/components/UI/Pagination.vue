@@ -42,7 +42,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { createPaginationArr } from "@/helpers/functions";
+import { getPagination } from "@/helpers/functions";
+import { PAGINATION_TYPE } from "@/helpers/const";
 
 export default defineComponent({
   name: "my-pagination",
@@ -59,20 +60,42 @@ export default defineComponent({
       required: false,
       default: "",
     },
+    currentPage: {
+      type: Number,
+    },
+    type: {
+      type: String,
+      default: "router",
+      validator: (value: string) => {
+        return Object.values(PAGINATION_TYPE).indexOf(value) !== -1;
+      },
+    },
   },
   computed: {
     pagination() {
-      return createPaginationArr(this.total!, this.show!, this.current!);
+      const args = {
+        total: this.total as number,
+        show: this.show as number,
+        current: this.current as number,
+      };
+
+      return getPagination(args);
     },
     current() {
-      return +this.$route.params.page;
+      if (this.type === PAGINATION_TYPE.ROUTER) {
+        return +this.$route.params.page;
+      } else {
+        return this.currentPage;
+      }
     },
   },
 
   methods: {
     clickHandler(index: number) {
-      const path = `/${this.linkPath ? this.linkPath + "/" : ""}${index}`;
-      this.$router.push(path);
+      if (this.type === PAGINATION_TYPE.ROUTER) {
+        const path = `/${this.linkPath ? this.linkPath + "/" : ""}${index}`;
+        this.$router.push(path);
+      }
       this.pageChangeHandler!(index);
     },
   },

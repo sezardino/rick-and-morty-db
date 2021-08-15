@@ -7,7 +7,7 @@ import {
 } from "../interfaces";
 import { ICharacter } from "@/interfaces";
 
-import { getItemsInIDRange } from "@/helpers/functions";
+import { getItemsInRange } from "@/helpers/functions";
 import lsApi from "@/api/ls";
 
 const favorites: Module<FavoritesStateTypes, IRootState> = {
@@ -82,11 +82,14 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
     },
 
     getItems({ getters, rootGetters }, page) {
-      const items = getItemsInIDRange({
-        page: page,
-        limit: rootGetters["app/perPage"],
-        items: getters.allItems,
-      });
+      const items = getItemsInRange(
+        {
+          page: page,
+          limit: rootGetters["app/perPage"],
+          items: getters.allItems,
+        },
+        true
+      );
 
       return items;
     },

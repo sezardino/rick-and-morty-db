@@ -3,7 +3,7 @@ import { CharactersStateTypes, IRootState } from "../interfaces";
 import { ICharacter } from "@/interfaces";
 
 import gqlApi from "@/api/gqlApi";
-import { getItemsInIDRange } from "@/helpers/functions";
+import { getItemsInRange } from "@/helpers/functions";
 
 const characters: Module<CharactersStateTypes, IRootState> = {
   namespaced: true,
@@ -70,7 +70,7 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     },
 
     getItems({ getters, rootGetters }, page) {
-      const items = getItemsInIDRange({
+      const items = getItemsInRange({
         page: page,
         limit: rootGetters["app/perPage"],
         items: getters.all,

@@ -17,3 +17,9 @@ export type PaginationType = {
   label: string;
   disabled: boolean;
 };
+
+export type getPaginationArgs = {
+  total: number;
+  show: number;
+  current: number;
+};

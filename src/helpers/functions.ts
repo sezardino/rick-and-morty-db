@@ -1,5 +1,4 @@
-import { IEpisode, ICharacter } from "@/interfaces";
-import { PaginationType } from "@/store/interfaces";
+import { IEpisode, ICharacter, PaginationType } from "@/interfaces";
 
 export const generateId = () => "id-" + Math.random().toString(36).substr(2, 9);
 
@@ -77,6 +76,9 @@ export const createPaginationArr = (
   let cases: (item: PaginationType, index: number) => void;
 
   switch (true) {
+    case show >= total:
+      pagination = [...Array(length).keys()].map((item) => item + 1);
+      break;
     case current === 1 || current === 2:
       pagination = [...Array(length).keys()].map((item) => item + 1);
       cases = (item, index) => {
@@ -122,7 +124,9 @@ export const createPaginationArr = (
 
   pagination.forEach((pageData, index) => {
     const item = generateItem(pageData);
-    cases(item, index);
+    if (cases) {
+      cases(item, index);
+    }
 
     pagination[index] = item;
   });

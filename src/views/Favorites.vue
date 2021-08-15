@@ -50,11 +50,17 @@ export default defineComponent({
       this.$store.dispatch("favorites/favoriteHandler", item);
     },
   },
+  watch: {
+    pageData(newValue) {
+      if (newValue) {
+        this.loading = false;
+      }
+    },
+  },
   async mounted() {
     const page = this.$route.params.page;
     try {
       await this.$store.dispatch("favorites/currentPageChange", page);
-      this.loading = false;
     } catch (error) {
       this.error = true;
     }

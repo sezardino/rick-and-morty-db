@@ -78,7 +78,6 @@ export default defineComponent({
       return gender.toLowerCase() + "-icon";
     },
     isFavorite(id: string) {
-      console.log(this.favorites);
       if (this.favorites!.find((item: any) => item.id === id)) {
         return true;
       } else {

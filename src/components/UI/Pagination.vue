@@ -47,30 +47,34 @@ import { createPaginationArr } from "@/helpers/functions";
 export default defineComponent({
   name: "my-pagination",
   props: {
-    current: {
-      type: Number,
-    },
     total: {
       type: Number,
     },
     show: {
       type: Number,
     },
+    pageChangeHandler: Function,
+    linkPath: {
+      type: String,
+      required: false,
+      default: "",
+    },
   },
-  emits: ["pageChange"],
   computed: {
     pagination() {
       return createPaginationArr(this.total!, this.show!, this.current!);
+    },
+    current() {
+      return +this.$route.params.page;
     },
   },
 
   methods: {
     clickHandler(index: number) {
-      this.$emit("pageChange", index);
+      const path = `/${this.linkPath ? this.linkPath + "/" : ""}${index}`;
+      this.$router.push(path);
+      this.pageChangeHandler!(index);
     },
   },
-  // setup() {
-
-  // },
 });
 </script>

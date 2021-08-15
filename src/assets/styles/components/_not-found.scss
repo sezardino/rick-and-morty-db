@@ -1,0 +1,33 @@
+.not-found {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__title {
+    font-weight: var(--fw-medium);
+    font-size: var(--fz-mega);
+    line-height: var(--lh-mega);
+
+    color: var(--color-light);
+
+    margin: 0;
+  }
+
+  &__subtitle,
+  &__link {
+    font-weight: var(--fw-regular);
+    font-size: var(--fz-xs);
+    line-height: var(--lh-xs);
+
+    color: var(--color-aqua);
+  }
+
+  &__link {
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+}

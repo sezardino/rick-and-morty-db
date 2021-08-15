@@ -16,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: { layout: LAYOUTS.DEFAULT },
     component: () => import("@/views/Favorites.vue"),
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "404",
+    component: () => import("@/views/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({

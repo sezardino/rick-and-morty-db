@@ -2,9 +2,11 @@
   --font-poppins: "Poppins";
 
   --fz-xs: 1.6rem;
+  --fz-mega: 10rem;
 
   --lh-xs: 2.2rem;
   --lh-sm: 2.4rem;
+  --lh-mega: 10.3rem;
 
   --color-white: #ffffff;
   --color-gray: #a9b1bd;
@@ -23,6 +25,10 @@
 
   @include breakpoint-down("xl") {
     --gutters: 100px;
+  }
+  @include breakpoint-down("lg") {
+    --fz-mega: 5rem;
+    --lh-mega: 5.3rem;
   }
   @include breakpoint-down("md") {
     --gutters: 50px;

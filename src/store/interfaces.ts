@@ -1,27 +1,37 @@
 import { ICharacter } from "@/interfaces";
-import { Commit, Dispatch, Getter } from "vuex";
+import { Commit, Dispatch } from "vuex";
 
 export interface IRootState {
+  app: AppStateTypes;
   characters: CharactersStateTypes;
+  favorites: FavoritesStateTypes;
+  search: SearchStateTypes;
 }
 
-export interface CharactersStateTypes {
-  all: ICharacter[] | [];
-  favorites: ICharacter[] | [];
+interface defaultState {
+  allItems: ICharacter[] | [];
   pageData: ICharacter[] | [];
   currentPage: number;
   totalPages: number;
 }
 
+export interface AppStateTypes {
+  perPage: number;
+  paginationToShow: number;
+}
+
+export interface CharactersStateTypes {
+  all: ICharacter[] | [];
+  pageData: ICharacter[] | [];
+  currentPage: number;
+  totalPages: number;
+}
+export interface FavoritesStateTypes extends defaultState {}
+export interface SearchStateTypes {}
+
 export type ActionContextType = {
   dispatch: Dispatch;
   commit: Commit;
   getters: any;
-};
-
-export type PaginationType = {
-  id: string;
-  value: number | null;
-  label: string;
-  disabled: boolean;
+  rootGetters: any;
 };

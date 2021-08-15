@@ -10,3 +10,10 @@ export interface ICharacter {
 export interface IEpisode {
   episode: string;
 }
+
+export type PaginationType = {
+  id: string;
+  value: number | null;
+  label: string;
+  disabled: boolean;
+};

@@ -25,6 +25,8 @@
 
   --gutters: 140px;
 
+  // --bg-home: url("../images/home-bg.png");
+
   @include breakpoint-down("xl") {
     --gutters: 100px;
   }

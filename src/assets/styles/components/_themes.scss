@@ -1,0 +1,29 @@
+.themes {
+  &__title {
+  }
+
+  &__list {
+    margin-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  &__item {
+  }
+
+  &__button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+
+    cursor: pointer;
+  }
+
+  &__img {
+    width: 250px;
+    height: 250px;
+    object-fit: scale-down;
+  }
+}

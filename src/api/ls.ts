@@ -8,8 +8,9 @@ class LSApi {
   }
 
   getData() {
-    const data = localStorage.getItem(this.keyName);
-    return JSON.parse(data!) || null;
+    const data = localStorage.getItem(this.keyName) as string;
+
+    return JSON.parse(data) || [];
   }
 
   saveData(items: ICharacter[]) {

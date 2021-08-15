@@ -1,4 +1,9 @@
-import { IEpisode, ICharacter, PaginationType } from "@/interfaces";
+import {
+  IEpisode,
+  ICharacter,
+  PaginationType,
+  getPaginationArgs,
+} from "@/interfaces";
 
 export const generateId = () => "id-" + Math.random().toString(36).substr(2, 9);
 
@@ -15,24 +20,37 @@ export const getLastEpisode = (episodes: Array<IEpisode>) => {
   return sortedArr[sortedArr.length - 1]?.episode;
 };
 
-type getItemsInIDRangeProps = {
+type getItemsInRangeProps = {
   page: number;
   limit: number;
   items: ICharacter[];
 };
 
-export const getItemsInIDRange = ({
-  page = 1,
-  limit,
-  items,
-}: getItemsInIDRangeProps): ICharacter[] => {
-  const extra = page === 1 ? 0 : 1;
+export const getItemsInRange = (
+  { page = 1, limit, items }: getItemsInRangeProps,
+  indexSearch = false
+): ICharacter[] => {
+  const extra = page === 1 || indexSearch ? 0 : 1;
   const start = (page - 1) * limit + extra;
-  const end = page * limit;
+  const end = page * limit - (indexSearch ? 1 : 0);
 
-  const neededItems = items.filter(
-    (item: any) => item.id >= start && item.id <= end
-  );
+  const neededItems = items.filter((item: any, index) => {
+    switch (indexSearch) {
+      case false:
+        if (item.id >= start && item.id <= end) {
+          return item;
+        }
+        break;
+      case true:
+        if (index >= start && index <= end) {
+          return item;
+        }
+        break;
+
+      default:
+        break;
+    }
+  });
 
   return neededItems;
 };
@@ -57,11 +75,8 @@ const editLabelAndValueItem = (item: PaginationType, value: number) => {
   item.value = value;
 };
 
-export const createPaginationArr = (
-  total: number,
-  show: number,
-  current: number
-) => {
+export const getPagination = (args: getPaginationArgs) => {
+  const { total, show, current } = args;
   let length: number;
 
   if (total >= show) {
@@ -74,11 +89,11 @@ export const createPaginationArr = (
 
   let pagination: PaginationType[] | number[] | [] = [];
   let cases: (item: PaginationType, index: number) => void;
-
   switch (true) {
     case show >= total:
       pagination = [...Array(length).keys()].map((item) => item + 1);
       break;
+
     case current === 1 || current === 2:
       pagination = [...Array(length).keys()].map((item) => item + 1);
       cases = (item, index) => {

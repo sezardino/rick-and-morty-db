@@ -27,7 +27,9 @@ export interface CharactersStateTypes {
   totalPages: number;
 }
 export interface FavoritesStateTypes extends defaultState {}
-export interface SearchStateTypes {}
+export interface SearchStateTypes extends defaultState {
+  query: string;
+}
 
 export type ActionContextType = {
   dispatch: Dispatch;

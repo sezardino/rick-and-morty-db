@@ -24,3 +24,30 @@ export const pageQuery = (page: number) => `
     }
   }
 `;
+
+export const searchCountQuery = (query: string) => `
+query {
+  characters(filter: {name: "${query}"}) {
+    info {
+      count
+    }
+  }
+}
+`;
+
+export const searchQuery = (query: string, page: number) => `
+  query {
+    characters(filter: {name: "${query}"} page: ${page} ) {
+      results {
+        name
+          id
+          image
+          gender
+          species
+          episode {
+            episode
+          }
+      }
+    }
+  }
+`;

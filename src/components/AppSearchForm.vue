@@ -1,9 +1,10 @@
 <template>
-  <form class="search-form" @submit.prevent>
+  <form class="search-form" @submit.prevent="searchSubmit">
     <input
       type="text"
       class="search-form__input"
       placeholder="Start typing to search..."
+      v-model="query"
     />
     <button class="search-form__button">
       <img src="@/assets/images/search-ico.svg" class="search-form__icon" />
@@ -17,8 +18,14 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "app-search-form",
-  // setup() {
-
-  // },
+  data() {
+    return { query: "" };
+  },
+  methods: {
+    searchSubmit() {
+      this.$router.push(`/search?s=${this.query}`);
+      this.query = "";
+    },
+  },
 });
 </script>

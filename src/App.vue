@@ -15,13 +15,10 @@ export default defineComponent({
   },
   async mounted() {
     try {
-      await this.$store.dispatch("characters/init");
+      await this.$store.dispatch("favorites/init");
     } catch (error) {
       console.log(error);
     }
   },
-  // setup() {
-
-  // },
 });
 </script>

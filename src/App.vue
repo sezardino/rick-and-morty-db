@@ -1,13 +1,20 @@
 <template>
-  <component :is="layout + '-layout'">
-    <router-view />
-  </component>
+  <app-error-boundary :error="error">
+    <component :is="layout + '-layout'">
+      <router-view />
+    </component>
+  </app-error-boundary>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
 
 export default defineComponent({
+  components: { AppErrorBoundary },
+  data() {
+    return { error: false };
+  },
   computed: {
     layout() {
       return this.$route.meta.layout;
@@ -17,7 +24,7 @@ export default defineComponent({
     try {
       await this.$store.dispatch("favorites/init");
     } catch (error) {
-      console.log(error);
+      this.error = true;
     }
   },
 });

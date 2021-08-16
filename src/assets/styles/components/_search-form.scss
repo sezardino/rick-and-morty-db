@@ -7,16 +7,11 @@
   border-radius: var(--border-radius);
 
   width: 100%;
-  max-width: 505px;
 
   transition: var(--transition-standard) box-shadow ease-in-out;
 
   &:focus-within {
     box-shadow: 0 0 30px var(--theme-default-first-color);
-  }
-
-  @include breakpoint-down("xl") {
-    max-width: 400px;
   }
 
   &__input {
@@ -28,7 +23,7 @@
 
     font-weight: var(--fw-medium);
     font-size: var(--fz-xs);
-    line-height: var(--lh-sm);
+    line-height: var(--lh-md);
 
     color: var(--theme-font-color);
 

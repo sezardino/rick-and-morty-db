@@ -1,16 +1,18 @@
 <template>
-  <div class="themes home__themes">
-    <h2 class="themes__title">Thoose theme</h2>
+  <div class="themes">
+    <h2 class="themes__title">Choose theme</h2>
     <ul class="themes__list">
       <li class="themes__item" v-for="theme in themes" :key="theme.value">
         <button
-          :class="`themes__button ${
-            theme.value === current ? 'themes__button--active' : ''
-          } themes__button--${theme.value}`"
+          :class="{
+            themes__button: true,
+            [`themes__button--${theme.value}`]: true,
+            'themes__button--current': theme.value === current,
+          }"
           @click.prevent="clickHandler(theme.value)"
           :disabled="theme.value === current"
         >
-          <img :src="theme.img" alt="Portal theme" class="themes__img" />
+          {{ theme.label }}
         </button>
       </li>
     </ul>

@@ -1,13 +1,15 @@
 :root {
   --font-poppins: "Poppins";
 
-  --fz-xs: 1.6rem;
+  --fz-xs: 1.4rem;
+  --fz-sm: 1.6rem;
   --fz-lg: 3rem;
   --fz-mega: 10rem;
   --fz-home: 24rem;
 
-  --lh-xs: 2.2rem;
-  --lh-sm: 2.4rem;
+  --lh-xs: 2.1rem;
+  --lh-sm: 2.2rem;
+  --lh-md: 2.4rem;
   --lh-lg: 3.4rem;
   --lh-mega: 10.3rem;
   --lh-home: 24.3rem;
@@ -28,8 +30,6 @@
   --border-radius-sm: 4px;
 
   --gutters: 140px;
-
-  --red: red;
 
   --theme-default-bg: var(--color-white);
   --theme-default-first-color: var(--color-aqua);
@@ -55,9 +55,10 @@
   --theme-font-color: var(--theme-default-font-color);
   --theme-border-color: var(--theme-default-border-color);
 
-  --bg: url("../images/bg.jpg");
+  --bg: url("../images/bg.png");
 
   @include breakpoint-down("fhd") {
+    --gutters: 120px;
     --fz-home: 18rem;
     --lh-home: 18.3rem;
   }
@@ -65,7 +66,7 @@
     --fz-home: 17rem;
     --lh-home: 17.3rem;
   }
-  @include breakpoint-down("xl") {
+  @include breakpoint-down("xxl") {
     --gutters: 100px;
 
     --fz-home: 15rem;

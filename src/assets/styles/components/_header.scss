@@ -32,21 +32,36 @@
       }
     }
 
-    @include breakpoint-down("lg") {
-      gap: 40px;
+    @include breakpoint-down("xxl") {
+      justify-content: space-between;
+      gap: 20px;
     }
-    // @include breakpoint-down("xl") {
-    //   gap: 20px;
-    // }
 
-    @include breakpoint-down("lg") {
+    @include breakpoint-down("xl") {
       flex-direction: column;
     }
   }
 
   &__logo {
+    order: 1;
   }
 
-  &__nav {
+  &__search {
+    order: 2;
+
+    width: 100%;
+    max-width: 505px;
+
+    @include breakpoint-down("xxl") {
+      max-width: 400px;
+      order: 3;
+    }
+  }
+
+  &__themes {
+    order: 3;
+    @include breakpoint-down("xl") {
+      order: 2;
+    }
   }
 }

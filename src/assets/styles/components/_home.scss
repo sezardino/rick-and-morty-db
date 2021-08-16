@@ -1,33 +1,12 @@
 .home {
+  width: 100%;
   padding: 0 var(--gutters);
-  padding-top: 30px;
 
-  @include breakpoint-down("lg") {
-    padding-top: 0;
-  }
-
-  &__title {
-    background-image: var(--bg);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-
-    margin: 0;
-
-    font-weight: var(--fw-black);
-    font-size: var(--fz-home);
-    line-height: var(--lh-home);
-
-    br::selection {
-      color: transparent;
-    }
-
-    &::selection {
-      color: transparent;
-      background: transparent;
-    }
-  }
-
-  &__themes {
+  &__bg {
+    aspect-ratio: 16 / 9;
+    background: var(--bg);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 }

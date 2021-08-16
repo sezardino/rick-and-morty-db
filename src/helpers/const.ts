@@ -11,6 +11,11 @@ export const PAGINATION_TYPE = {
   PROGRAMMATIC: "programmatic",
 };
 
+export const themes = [
+  { label: "White", value: "default" },
+  { label: "Dark", value: "dark" },
+];
+
 export const mockData = [
   {
     name: "Aqua Morty",

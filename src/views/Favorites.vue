@@ -23,23 +23,20 @@
 <script lang="ts">
 import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
 import { ICharacter } from "@/interfaces";
+import useFavorite from "@/use/useFavorite";
 import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
   name: "Favorites",
   components: { AppErrorBoundary },
+  setup() {
+    const favorites = useFavorite();
+
+    return { ...favorites };
+  },
   data() {
     return { loading: true, error: false };
-  },
-
-  computed: {
-    ...mapGetters({
-      pageData: "favorites/pageData",
-      currentPage: "favorites/currentPage",
-      totalPages: "favorites/totalPages",
-      paginationToShow: "app/paginationToShow",
-    }),
   },
 
   methods: {
@@ -47,6 +44,7 @@ export default defineComponent({
       this.$store.dispatch("favorites/currentPageChange", page);
     },
     favoriteHandler(item: ICharacter) {
+      console.log(1);
       this.$store.dispatch("favorites/favoriteHandler", item);
     },
   },

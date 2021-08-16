@@ -23,56 +23,18 @@
 </template>
 
 <script lang="ts">
-import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
-import { ICharacter } from "@/interfaces";
 import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import useSearch from "@/use/useSearch";
+import useFavorite from "@/use/useFavorite";
+import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
 
 export default defineComponent({
   components: { AppErrorBoundary },
-  data() {
-    return { loading: true, error: false };
-  },
-  computed: {
-    ...mapGetters({
-      pageData: "search/pageData",
-      currentPage: "search/currentPage",
-      totalPages: "search/totalPages",
-      favorites: "favorites/allItems",
-      paginationToShow: "app/paginationToShow",
-    }),
-    searchParam() {
-      return this.$route.query.s;
-    },
-  },
-  methods: {
-    async fetchData() {
-      this.loading = true;
-      try {
-        await this.$store.dispatch("search/search", this.searchParam);
-        this.loading = false;
-      } catch (error) {
-        this.error = true;
-      }
-    },
-    async pageChangeHaldler(page: number) {
-      this.loading = true;
-      await this.$store.dispatch("search/changePageHandler", page);
-      this.loading = false;
-    },
-    favoriteHandler(item: ICharacter) {
-      this.$store.dispatch("favorites/favoriteHandler", item);
-    },
-  },
+  setup() {
+    const search = useSearch();
+    const { favoriteHandler } = useFavorite();
 
-  watch: {
-    searchParam() {
-      this.fetchData();
-    },
-  },
-
-  mounted() {
-    this.fetchData();
+    return { ...search, favoriteHandler, pageChangeHaldler: search.pageChange };
   },
 });
 </script>

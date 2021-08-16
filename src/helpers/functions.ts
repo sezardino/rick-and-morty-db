@@ -148,3 +148,26 @@ export const getPagination = (args: getPaginationArgs) => {
 
   return pagination;
 };
+
+// themes
+
+export const changeCssProperties = (theme: string) => {
+  const root = document.querySelector(":root") as HTMLElement;
+
+  const properties = [
+    "bg",
+    "first-color",
+    "second-color",
+    "third-color",
+    "hover-color",
+    "font-color",
+    "border-color",
+  ];
+
+  properties.forEach((property) => {
+    root.style.setProperty(
+      `--theme-${property}`,
+      `var(--theme-${theme}-${property})`
+    );
+  });
+};

@@ -19,8 +19,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import useThemes from "@/use/useTheme";
+
 import AppHeader from "@/components/AppHeader.vue";
-import { mapGetters } from "vuex";
 import AppSearchForm from "@/components/AppSearchForm.vue";
 import AppNav from "@/components/AppNav.vue";
 import AppThemes from "@/components/AppThemes.vue";
@@ -28,22 +29,14 @@ import AppThemes from "@/components/AppThemes.vue";
 export default defineComponent({
   name: "default-layout",
   components: { AppHeader, AppSearchForm, AppNav, AppThemes },
-  computed: {
-    ...mapGetters({ currentTheme: "app/theme" }),
-    themes() {
-      const themes = [
-        { label: "White", value: "default" },
-        { label: "Dark", value: "dark" },
-      ];
+  setup() {
+    const { handler, themes, theme: currentTheme } = useThemes();
 
-      return themes;
-    },
-  },
-  methods: {
-    themeHandler(value: string) {
-      console.log(1);
-      this.$store.dispatch("app/changeTheme", value);
-    },
+    return {
+      themeHandler: handler,
+      themes,
+      currentTheme,
+    };
   },
 });
 </script>

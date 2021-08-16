@@ -1,46 +1,41 @@
 <template>
   <section class="home">
-    <h1 class="visually-hidden">Home Page</h1>
-    <div class="themes home__themes">
-      <h2 class="themes__title">Thoose theme</h2>
-      <ul class="themes__list">
-        <li class="themes__item">
-          <button class="themes__button">
-            <img
-              src="@/assets/images/dark.png"
-              alt="Portal theme"
-              class="themes__img"
-            />
-          </button>
-        </li>
-        <li class="themes__item">
-          <button class="themes__button">
-            <img
-              src="@/assets/images/portal.png"
-              alt="Jarry theme"
-              class="themes__img"
-            />
-          </button>
-        </li>
-        <li class="themes__item">
-          <button class="themes__button">
-            <img
-              src="@/assets/images/rick.png"
-              alt="Rick theme"
-              class="themes__img"
-            />
-          </button>
-        </li>
-        <li class="themes__item">
-          <button class="themes__button">
-            <img
-              src="@/assets/images/head.png"
-              alt="Rick theme"
-              class="themes__img"
-            />
-          </button>
-        </li>
-      </ul>
-    </div>
+    <h1 class="home__title">
+      RICK & <br />
+      MORTY DB
+    </h1>
+    <app-themes
+      :current="currentTheme"
+      :themes="themes"
+      @themeChange="themeChangeHandler"
+    ></app-themes>
   </section>
 </template>
+
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import AppThemes from "@/components/AppThemes.vue";
+import themeImg from "@/assets/images/rick.png";
+import { mapGetters } from "vuex";
+
+export default defineComponent({
+  components: { AppThemes },
+  computed: {
+    ...mapGetters({ currentTheme: "app/theme" }),
+    themes() {
+      const themes = [
+        { label: "Dark", img: themeImg, value: "dark" },
+        { label: "White", img: themeImg, value: "default" },
+      ];
+
+      return themes;
+    },
+  },
+  methods: {
+    themeChangeHandler(value: string) {
+      this.$store.dispatch("app/changeTheme", value);
+    },
+  },
+});
+</script>

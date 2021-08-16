@@ -1,6 +1,4 @@
 <template>
-  Search PAGE {{ $route.query }}
-  {{ searchParam }}
   <app-error-boundary :error="error">
     <my-loader v-if="loading"></my-loader>
     <section v-else>

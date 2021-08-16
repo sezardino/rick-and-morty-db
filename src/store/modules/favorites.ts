@@ -67,7 +67,7 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
   actions: {
     async init({ commit, getters, rootGetters }) {
       if (!getters.allItems.length) {
-        const favorites = await lsApi.getData();
+        const favorites = await lsApi.getData("favorites");
         const count = favorites.length;
         const pagesCount = Math.floor(count / rootGetters["app/perPage"]);
 
@@ -97,18 +97,23 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
     async currentPageChangeHandler({ commit, dispatch, getters }) {
       const page = getters.currentPage;
       const items = await dispatch("getItems", page);
-
+      console.log(items);
       commit("pageData", items);
     },
 
-    favoriteHandler({ commit, getters }, payload) {
+    saveData({ getters }) {
+      console.log(getters.allItems);
+      lsApi.saveData(getters.allItems, "favorites");
+    },
+
+    favoriteHandler({ commit, dispatch, getters }, payload) {
       if (getters.allItems.find((item: ICharacter) => item.id === payload.id)) {
         commit("removeFavorite", payload);
       } else {
         commit("addFavorite", payload);
       }
 
-      lsApi.saveData(getters.allItems);
+      dispatch("saveData");
     },
   },
 };

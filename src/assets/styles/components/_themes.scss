@@ -17,8 +17,31 @@
     background-color: transparent;
     border: none;
     padding: 0;
+    border-radius: var(--border-radius);
 
     cursor: pointer;
+
+    &--default {
+      background-color: var(--color-white);
+    }
+
+    &--dark {
+      background-color: var(--color-dark);
+    }
+  }
+
+  &__button--active {
+    &.themes__button--default {
+      box-shadow: 0 0 30px var(--color-dark);
+    }
+
+    &.themes__button--dark {
+      box-shadow: 0 0 30px var(--color-light);
+    }
+
+    &:disabled {
+      cursor: default;
+    }
   }
 
   &__img {

@@ -12,7 +12,7 @@
   transition: var(--transition-standard) box-shadow ease-in-out;
 
   &:focus-within {
-    box-shadow: 0 0 30px var(--color-aqua);
+    box-shadow: 0 0 30px var(--theme-default-first-color);
   }
 
   @include breakpoint-down("xl") {
@@ -30,7 +30,11 @@
     font-size: var(--fz-xs);
     line-height: var(--lh-sm);
 
-    color: var(--color-gray);
+    color: var(--theme-font-color);
+
+    &::placeholder {
+      color: var(--theme-font-color);
+    }
 
     @include breakpoint-down("sm") {
       padding: 10px 15px;

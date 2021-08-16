@@ -18,6 +18,7 @@ interface defaultState {
 export interface AppStateTypes {
   perPage: number;
   paginationToShow: number;
+  theme: string;
 }
 
 export interface CharactersStateTypes {

@@ -31,10 +31,10 @@ import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
 export default defineComponent({
   components: { AppErrorBoundary },
   setup() {
-    const search = useSearch();
+    const { pageChange, ...search } = useSearch();
     const { favoriteHandler } = useFavorite();
 
-    return { ...search, favoriteHandler, pageChangeHaldler: search.pageChange };
+    return { ...search, favoriteHandler, pageChangeHaldler: pageChange };
   },
 });
 </script>

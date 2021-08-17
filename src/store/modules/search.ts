@@ -1,5 +1,5 @@
 import { Module } from "vuex";
-import { ActionContextType, IRootState, SearchStateTypes } from "../interfaces";
+import { IRootState, SearchStateTypes } from "../interfaces";
 import { ICharacter } from "@/interfaces";
 
 import { getItemsInRange } from "@/helpers/functions";
@@ -52,12 +52,6 @@ const search: Module<SearchStateTypes, IRootState> = {
     },
   },
   actions: {
-    init({ commit }) {
-      commit("setCurrentPage", 1);
-      commit("setTotalPages", 0);
-      commit("resetItems");
-    },
-
     async getCount({ commit, getters, rootGetters }) {
       const query = getters.query;
       const totalCount = await gqlApi.getSearchCount(query);
@@ -67,8 +61,10 @@ const search: Module<SearchStateTypes, IRootState> = {
       commit("setTotalPages", pagesCount);
     },
 
-    async search({ commit, dispatch }, query) {
-      await dispatch("init");
+    async init({ commit, dispatch }, query) {
+      commit("setCurrentPage", 1);
+      commit("setTotalPages", 0);
+      commit("resetItems");
 
       commit("setQuery", query);
       await dispatch("getData");

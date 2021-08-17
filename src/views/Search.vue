@@ -13,9 +13,8 @@
         type="programmatic"
         :show="paginationToShow"
         :total="totalPages"
-        :linkPath="`search?s=${searchParam}`"
         :currentPage="currentPage"
-        :pageChangeHandler="pageChangeHaldler"
+        :pageChangeHandler="pageChange"
       >
       </my-pagination>
     </section>
@@ -27,14 +26,22 @@ import { defineComponent } from "vue";
 import useSearch from "@/use/useSearch";
 import useFavorite from "@/use/useFavorite";
 import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
+import usePage from "@/use/usePage";
 
 export default defineComponent({
   components: { AppErrorBoundary },
   setup() {
-    const { pageChange, ...search } = useSearch();
-    const { favoriteHandler } = useFavorite();
+    const { handler } = useSearch();
+    const pageProps = {
+      storeName: "search",
+      mountedHandler: handler,
+      queryChangeHandler: handler,
+    };
 
-    return { ...search, favoriteHandler, pageChangeHaldler: pageChange };
+    const page = usePage(pageProps);
+    const { handler: favoriteHandler } = useFavorite();
+
+    return { ...page, favoriteHandler };
   },
 });
 </script>

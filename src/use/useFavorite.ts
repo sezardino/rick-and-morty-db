@@ -1,54 +1,24 @@
-import { computed, onMounted, ref, watch } from "vue";
 import { ICharacter } from "@/interfaces";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+
 const useFavorite = () => {
-  const loading = ref(true);
-  const error = ref(false);
-
   const store = useStore();
-  const route = useRoute();
 
-  const favorites = computed(() => store.getters["favorites/items"]);
-  const pageData = computed(() => store.getters["favorites/pageData"]);
-  const currentPage = computed(() => store.getters["favorites/currentPage"]);
-  const totalPages = computed(() => store.getters["favorites/totalPages"]);
-  const paginationToShow = computed(
-    () => store.getters["app/paginationToShow"]
-  );
-  const favoriteHandler = async (item: ICharacter) => {
+  const handler = async (item: ICharacter) => {
     await store.dispatch("favorites/favoriteHandler", item);
   };
 
-  const pageChange = (page: number) => {
-    store.dispatch("favorites/currentPageChange", page);
+  const onMounted = async (page: string) => {
+    try {
+      await store.dispatch("favorites/showPage", page);
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 
-  watch(pageData, (newValue) => {
-    if (newValue) {
-      loading.value = false;
-    }
-  });
-
-  onMounted(async () => {
-    const page = route.params.page;
-    try {
-      await store.dispatch("favorites/currentPageChange", page);
-    } catch (e) {
-      error.value = true;
-    }
-  });
-
   return {
-    favorites,
-    loading,
-    error,
-    favoriteHandler,
-    pageChange,
-    pageData,
-    currentPage,
-    totalPages,
-    paginationToShow,
+    handler,
+    onMounted,
   };
 };
 

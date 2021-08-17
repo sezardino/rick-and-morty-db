@@ -14,7 +14,7 @@
         :total="totalPages"
         linkPath="favorites"
         :current="currentPage"
-        :pageChangeHandler="pageChangeHaldler"
+        :pageChangeHandler="pageChange"
       >
       </my-pagination>
     </section>
@@ -24,15 +24,23 @@
 <script lang="ts">
 import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
 import useFavorite from "@/use/useFavorite";
+import usePage from "@/use/usePage";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Favorites",
   components: { AppErrorBoundary },
   setup() {
-    const { pageChange: pageChangeHaldler, ...favorites } = useFavorite();
+    const { handler: favoriteHandler, onMounted } = useFavorite();
 
-    return { ...favorites, pageChangeHaldler };
+    const pageProps = {
+      storeName: "favorites",
+      mountedHandler: onMounted,
+    };
+
+    const page = usePage(pageProps);
+
+    return { favoriteHandler, ...page };
   },
 });
 </script>

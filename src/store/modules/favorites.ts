@@ -1,8 +1,5 @@
 import { Module } from "vuex";
-import {
-  FavoritesStateTypes,
-  IRootState,
-} from "../interfaces";
+import { FavoritesStateTypes, IRootState } from "../interfaces";
 import { ICharacter } from "@/interfaces";
 
 import { getItemsInRange } from "@/helpers/functions";
@@ -64,15 +61,35 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
     },
   },
   actions: {
-    async init({ commit, getters, rootGetters }) {
+    async init({ dispatch, getters }) {
       if (!getters.items.length) {
-        const favorites = await lsApi.getData("favorites");
-        const count = favorites.length;
-        const pagesCount = Math.ceil(count / rootGetters["app/perPage"]);
-
-        commit("setTotalPages", pagesCount);
-        commit("setItems", favorites);
+        await dispatch("getCharacters");
       }
+    },
+
+    async getCharacters({ commit, rootGetters }) {
+      const favorites = await lsApi.getData("favorites");
+      const count = favorites.length;
+      const pagesCount = Math.ceil(count / rootGetters["app/perPage"]);
+
+      commit("setTotalPages", pagesCount);
+      commit("setItems", favorites);
+    },
+
+    showPage({ dispatch }, page) {
+      dispatch("currentPageChange", page);
+    },
+
+    async changePageHandler({ commit, getters, dispatch }, page) {
+      if (page > getters.totalPages) {
+        return;
+      }
+
+      commit("setCurrentPage", page);
+
+      await dispatch("getCharacters", page);
+
+      dispatch("currentPageChangeHandler");
     },
 
     async currentPageChange({ commit, dispatch }, page) {

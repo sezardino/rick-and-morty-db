@@ -51,7 +51,7 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       const count = await gqlApi.getCount();
       const pagesCount = Math.floor(count / rootGetters["app/perPage"]);
       commit("setTotalPages", pagesCount);
-      dispatch("currentPageChange", page);
+      dispatch("changePageHandler", page);
     },
 
     async getCharacters({ commit, rootGetters }, page: number) {
@@ -61,7 +61,11 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       commit("addItems", characters);
     },
 
-    async currentPageChange({ commit, dispatch }, page) {
+    async changePageHandler({ commit, getters, dispatch }, page) {
+      if (page > getters.totalPages) {
+        return;
+      }
+
       commit("setCurrentPage", page);
 
       await dispatch("getCharacters", page);

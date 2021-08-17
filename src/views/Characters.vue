@@ -13,7 +13,7 @@
         :show="paginationToShow"
         :total="totalPages"
         linkPath="characters"
-        :pageChangeHandler="pageChangeHandler"
+        :pageChangeHandler="pageChange"
       >
       </my-pagination>
     </section>
@@ -22,18 +22,25 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import useCharacters from "@/use/useCharacters";
+import usePage from "@/use/usePage";
 import useFavorite from "@/use/useFavorite";
+import useCharacters from "@/use/useCharacters";
 import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
 
 export default defineComponent({
   components: { AppErrorBoundary },
   name: "Home",
   setup() {
-    const characters = useCharacters();
-    const { favoriteHandler } = useFavorite();
+    const { onMounted } = useCharacters();
 
-    return { ...characters, favoriteHandler };
+    const pageProps = {
+      storeName: "characters",
+      mountedHandler: onMounted,
+    };
+    const page = usePage(pageProps);
+    const { handler: favoriteHandler } = useFavorite();
+
+    return { ...page, favoriteHandler };
   },
 });
 </script>

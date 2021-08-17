@@ -5,7 +5,7 @@ import { useStore } from "vuex";
 type UsePageTypes = {
   storeName: string;
   queryChangeHandler?: (query: string) => void;
-  mountedHandler: (data: string) => void;
+  mountedHandler: (data: string) => Promise<any>;
 };
 
 const usePage = (props: UsePageTypes) => {
@@ -31,15 +31,19 @@ const usePage = (props: UsePageTypes) => {
     loading.value = true;
     try {
       await store.dispatch(storeName + "/changePageHandler", page);
+      pageCheck();
     } catch (e) {
       error.value = true;
     }
     loading.value = false;
   };
 
-  const pageCheck = (page: string) => {
-    const pageNum = +page;
-    if (!pageNum || pageNum <= 0 || pageNum >= totalPages.value) {
+  const pageCheck = () => {
+    const page = currentPage.value;
+    if (totalPages.value === 0) {
+      return true;
+    }
+    if (!page || page < 0 || page > totalPages.value) {
       router.push("/404");
       loading.value = false;
       return false;
@@ -60,18 +64,9 @@ const usePage = (props: UsePageTypes) => {
 
   onMounted(async () => {
     try {
-      // if (storeName === "favorites") {
-      //   await store.dispatch("favorites/showPage", page);
-      //   pageCheck(page);
-      //   return;
-      // } else if (storeName === "search") {
-      //   await store.dispatch("search/init", searchParam);
-      // } else {
-      //   await store.dispatch(storeName + "/init", page);
-      // }
       const param = storeName === "search" ? searchParam : page;
-      mountedHandler(param.value as string);
-      // pageCheck(page.value as string);
+      await mountedHandler(param.value as string);
+      pageCheck();
     } catch (e) {
       error.value = true;
     }

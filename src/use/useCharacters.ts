@@ -5,7 +5,7 @@ const useCharacters = () => {
 
   const onMounted = async (page: string) => {
     try {
-      await store.dispatch("characters/init", page);
+      return await store.dispatch("characters/init", page);
     } catch (error) {
       throw new Error(error);
     }

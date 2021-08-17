@@ -1,7 +1,7 @@
 <template>
   <div class="table">
     <p class="table__info" v-if="!data.length">{{ emptyLabel }}</p>
-    <table class="table__table" v-else>
+    <table class="table__table" v-else ref="table">
       <thead class="table__head">
         <tr class="table__row table__row--head">
           <th class="table__data--empty"></th>
@@ -56,9 +56,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { getLastEpisode } from "@/helpers/functions";
 import { IEpisode } from "@/interfaces";
+import useGsap from "@/use/useGsap";
 
 export default defineComponent({
   name: "my-table",
@@ -69,6 +70,8 @@ export default defineComponent({
   },
   emits: ["addFavorite"],
   setup(props) {
+    const table = ref(null);
+    const { tl } = useGsap();
     const thFields = [
       "Photo",
       "Character ID",
@@ -93,7 +96,19 @@ export default defineComponent({
       }
     };
 
-    return { thFields, lastEpisode, genderIcon, isFavorite };
+    onMounted(() => {
+      if (table.value) {
+        const tableEl = table.value as unknown as HTMLElement;
+        const rows = tableEl.querySelectorAll(".table__row");
+        tl.fromTo(
+          rows,
+          { x: "-=100", opacity: 0 },
+          { x: 0, stagger: 0.1, opacity: 1 }
+        );
+      }
+    });
+
+    return { table, thFields, lastEpisode, genderIcon, isFavorite };
   },
 });
 </script>

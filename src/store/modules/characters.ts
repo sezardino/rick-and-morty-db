@@ -52,6 +52,7 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       const pagesCount = Math.floor(count / rootGetters["app/perPage"]);
       commit("setTotalPages", pagesCount);
       dispatch("changePageHandler", page);
+      commit("setCurrentPage", page);
     },
 
     async getCharacters({ commit, rootGetters }, page: number) {

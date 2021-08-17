@@ -14,9 +14,6 @@ import AppErrorBoundary from "@/components/AppErrorBoundary.vue";
 
 export default defineComponent({
   components: { AppErrorBoundary },
-  setup() {
-    useThemes();
-  },
   data() {
     return { error: false };
   },

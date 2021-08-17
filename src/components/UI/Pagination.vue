@@ -16,7 +16,7 @@
           :class="`button pagination__button ${
             item.value === current ? 'button--active' : ''
           }`"
-          :disabled="item.disabled"
+          :disabled="item.disabled || item.value === current"
           @click="clickHandler(item.value)"
         >
           <span class="visually-hidden" v-if="!item.disabled">
@@ -28,7 +28,7 @@
       <li class="pagination__item">
         <button
           class="button pagination__button"
-          :disabled="current === total"
+          :disabled="current === total || total === 0"
           @click="clickHandler(current + 1)"
         >
           <pagination-icon class="pagination__icon pagination__icon--next">

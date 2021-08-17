@@ -10,6 +10,7 @@
         @addFavorite="favoriteHandler"
       ></my-table>
       <my-pagination
+        v-if="pageData.length"
         :show="paginationToShow"
         :total="totalPages"
         linkPath="characters"

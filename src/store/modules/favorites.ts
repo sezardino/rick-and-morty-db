@@ -50,7 +50,6 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
       return state.items;
     },
     pageData(state) {
-      console.log(state.pageData);
       return state.pageData;
     },
     totalPages(state) {

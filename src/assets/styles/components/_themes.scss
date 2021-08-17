@@ -1,0 +1,53 @@
+.themes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+
+  @include breakpoint-down("sm") {
+    gap: 15px;
+  }
+
+  &__title {
+    font-size: var(--fz-sm);
+    font-weight: var(--fw-regular);
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  &__item {
+    font-size: var(--fz-xs);
+    line-height: var(--lh-xs);
+  }
+
+  &__button {
+    background-color: transparent;
+    padding: 10px;
+    cursor: pointer;
+
+    border: 1px solid var(--color-dark);
+
+    &--default {
+      color: var(--color-dark);
+      background-color: var(--color-white);
+    }
+
+    &--dark {
+      background-color: var(--color-dark);
+      border-color: var(--color-light);
+    }
+
+    &--current {
+      color: var(--color-aqua);
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+}

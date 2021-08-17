@@ -1,9 +1,24 @@
 import { Module } from "vuex";
 import { FavoritesStateTypes, IRootState } from "../interfaces";
 import { ICharacter } from "@/interfaces";
-
-import { getItemsInRange } from "@/helpers/functions";
 import lsApi from "@/api/ls";
+import {
+  setItems,
+  setPageData,
+  setTotalPages,
+  setCurrentPage,
+} from "./../helpers/commonMutations";
+import {
+  items,
+  pageData,
+  totalPages,
+  currentPage,
+} from "./../helpers/commonGetters";
+import {
+  prepareItemsForPage,
+  showPageHandler,
+  changePageHandler,
+} from "../helpers/commonActions";
 
 const favorites: Module<FavoritesStateTypes, IRootState> = {
   namespaced: true,
@@ -14,19 +29,10 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
     currentPage: 1,
   },
   mutations: {
-    setItems(state, payload: any) {
-      state.items = payload;
-    },
-    setPageData(state, payload) {
-      state.pageData = payload;
-    },
-    setTotalPages(state, payload) {
-      state.totalPages = payload;
-    },
-    setCurrentPage(state, payload) {
-      state.currentPage = payload;
-    },
-
+    setItems,
+    setPageData,
+    setTotalPages,
+    setCurrentPage,
     addFavorite(state, payload: any) {
       if (payload.length) {
         state.items = [...state.items, ...payload];
@@ -41,26 +47,21 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
     },
   },
   getters: {
-    items(state) {
-      return state.items;
-    },
-    pageData(state) {
-      return state.pageData;
-    },
-    totalPages(state) {
-      return state.totalPages;
-    },
-    currentPage(state) {
-      return state.currentPage;
-    },
+    items,
+    pageData,
+    totalPages,
+    currentPage,
   },
   actions: {
+    prepareItemsForPage,
+    showPageHandler,
+    changePageHandler,
     async init({ dispatch, commit, getters }, page?: number) {
       if (getters.items) {
         commit("setCurrentPage", page);
         await dispatch("getData");
         await dispatch("getCount");
-        await dispatch("showHandler");
+        await dispatch("showPageHandler");
       } else {
         await dispatch("getData");
       }
@@ -74,43 +75,15 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
 
     async getData({ commit }) {
       const favorites = await lsApi.getData("favorites");
-      console.log(favorites);
       commit("setItems", favorites);
-    },
-
-    async changePageHandler({ commit, getters, dispatch }, page) {
-      if (page > getters.totalPages) {
-        return;
-      }
-      commit("setCurrentPage", page);
-      await dispatch("showHandler");
-    },
-
-    prepareItemsForPage({ getters, rootGetters }, page) {
-      const items = getItemsInRange(
-        {
-          page: page,
-          limit: rootGetters["app/perPage"],
-          items: getters.items,
-        },
-        true
-      );
-
-      return items;
-    },
-
-    async showHandler({ commit, dispatch, getters }) {
-      const page = getters.currentPage;
-      const items = await dispatch("prepareItemsForPage", page);
-
-      commit("setPageData", items);
     },
 
     async removeFromFavorite({ commit, dispatch }, payload) {
       commit("removeFavorite", payload);
       await dispatch("saveData");
       await dispatch("getData");
-      await dispatch("showHandler");
+      await dispatch("getCount");
+      await dispatch("showPageHandler");
     },
 
     async favoriteHandler({ commit, dispatch, getters }, payload) {

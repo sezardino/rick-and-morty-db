@@ -39,7 +39,7 @@ export default defineComponent({
         .fromTo(
           sectionChildren[0],
           { fontSize: 0 },
-          { fontSize: 100, opacity: 1 }
+          { fontSize: "", opacity: 1 }
         )
         .fromTo(
           [sectionChildren[1], sectionChildren[2]],

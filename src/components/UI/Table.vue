@@ -12,7 +12,7 @@
           <th class="table__data--empty"></th>
         </tr>
       </thead>
-      <transition-group tag="tbody" class="table__body" name="someName">
+      <transition-group tag="tbody" class="table__body" name="row">
         <tr class="table__row" v-for="item in data" :key="item.id">
           <td class="table__data--empty"></td>
           <td class="table__data">
@@ -103,7 +103,7 @@ export default defineComponent({
         tl.fromTo(
           rows,
           { x: "-=100", opacity: 0 },
-          { x: 0, stagger: 0.1, opacity: 1 }
+          { x: 0, stagger: 0.1, opacity: 1, clearProps: "all" }
         );
       }
     });

@@ -8,7 +8,7 @@
   align-items: center;
 
   &__title {
-    font-weight: var(--fw-medium);
+    font-weight: var(--fw-black);
     font-size: var(--fz-mega);
     line-height: var(--lh-mega);
 
@@ -19,6 +19,7 @@
 
   &__subtitle,
   &__link {
+    text-align: center;
     font-weight: var(--fw-regular);
     font-size: var(--fz-sm);
     line-height: var(--lh-sm);

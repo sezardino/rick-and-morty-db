@@ -1,9 +1,20 @@
+import {
+  items,
+  currentPage,
+  pageData,
+  totalPages,
+} from "./../helpers/commonGetters";
+import {
+  setTotalPages,
+  setPageData,
+  setCurrentPage,
+} from "./../helpers/commonMutations";
+import { prepareItemsForPage } from "../helpers/commonActions";
 import { Module } from "vuex";
 import { CharactersStateTypes, IRootState } from "../interfaces";
 import { ICharacter } from "@/interfaces";
 
 import gqlApi from "@/api/gqlApi";
-import { getItemsInRange } from "@/helpers/functions";
 
 const characters: Module<CharactersStateTypes, IRootState> = {
   namespaced: true,
@@ -14,6 +25,9 @@ const characters: Module<CharactersStateTypes, IRootState> = {
     totalPages: 0,
   },
   mutations: {
+    setTotalPages,
+    setPageData,
+    setCurrentPage,
     addItems(state, payload: ICharacter[]) {
       const filtered = payload.filter((payloadItem) => {
         if (!state.items.find((item) => item.id === payloadItem.id)) {
@@ -22,31 +36,15 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       });
       state.items = [...state.items, ...filtered];
     },
-    setTotalPages(state, payload: number) {
-      state.totalPages = payload;
-    },
-    setPageData(state, payload) {
-      state.pageData = payload;
-    },
-    setCurrentPage(state, payload) {
-      state.currentPage = payload;
-    },
   },
   getters: {
-    items(state) {
-      return state.items;
-    },
-    currentPage(state) {
-      return state.currentPage;
-    },
-    pageData(state) {
-      return state.pageData;
-    },
-    totalPages(state) {
-      return state.totalPages;
-    },
+    items,
+    currentPage,
+    pageData,
+    totalPages,
   },
   actions: {
+    prepareItemsForPage,
     async init({ commit, rootGetters, dispatch }, page) {
       const count = await gqlApi.getCount();
       const pagesCount = Math.floor(count / rootGetters["app/perPage"]);
@@ -55,7 +53,7 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       commit("setCurrentPage", page);
     },
 
-    async getCharacters({ commit, rootGetters }, page: number) {
+    async getData({ commit, rootGetters }, page: number) {
       const neededPage = Math.ceil((page * rootGetters["app/perPage"]) / 20);
       const characters = await gqlApi.getCharacters(neededPage);
 
@@ -68,26 +66,17 @@ const characters: Module<CharactersStateTypes, IRootState> = {
       }
 
       commit("setCurrentPage", page);
-
-      await dispatch("getCharacters", page);
-
-      dispatch("currentPageChangeHandler");
+      await dispatch("getData", page);
+      dispatch("showPageHandler");
     },
 
-    getItems({ getters, rootGetters }, page) {
-      const items = getItemsInRange({
-        page: page,
-        limit: rootGetters["app/perPage"],
-        items: getters.items,
-      });
-
-      return items;
-    },
-
-    async currentPageChangeHandler({ commit, dispatch, getters, rootGetters }) {
+    async showPageHandler({ commit, dispatch, getters, rootGetters }) {
       const perPage = rootGetters["app/perPage"];
       const page = getters.currentPage;
-      const items = await dispatch("getItems", page);
+      const items = await dispatch("prepareItemsForPage", {
+        page,
+        indexSearch: false,
+      });
 
       if (items.length === perPage) {
         commit("setPageData", items);
@@ -96,8 +85,8 @@ const characters: Module<CharactersStateTypes, IRootState> = {
           commit("setPageData", items);
         }
         const neededPage = Math.ceil((page * perPage) / 20);
-        await dispatch("getCharacters", neededPage);
-        await dispatch("currentPageChangeHandler");
+        await dispatch("getData", neededPage);
+        await dispatch("showPageHandler");
       }
     },
   },

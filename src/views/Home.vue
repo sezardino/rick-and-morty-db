@@ -18,11 +18,7 @@ export default defineComponent({
       const header = document.querySelector(".header");
       const bg = homeBg.value;
       tl.set([header, bg], { opacity: 0 })
-        .fromTo(
-          bg,
-          { y: "-=200%" },
-          { y: 0, opacity: 1, ease: "bounce", duration: 1.2 }
-        )
+        .fromTo(bg, { y: "-=200%" }, { y: 0, opacity: 1, duration: 1.2 })
         .fromTo(header, { y: "-=100%" }, { y: 0, opacity: 1 });
     });
 

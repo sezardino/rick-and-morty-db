@@ -8,7 +8,7 @@ export interface IRootState {
   search: SearchStateTypes;
 }
 
-interface defaultState {
+export interface defaultState {
   items: ICharacter[] | [];
   pageData: ICharacter[] | [];
   currentPage: number;

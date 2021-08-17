@@ -14,18 +14,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "app-search-form",
-  data() {
-    return { query: "" };
-  },
-  methods: {
-    searchSubmit() {
-      this.$router.push(`/search?s=${this.query}`);
-      this.query = "";
-    },
+  setup() {
+    const query = ref("");
+    const router = useRouter();
+
+    const searchSubmit = () => {
+      router.push(`/search?s=${query.value}`);
+      query.value = "";
+    };
+
+    return { query, searchSubmit };
   },
 });
 </script>

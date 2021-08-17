@@ -21,5 +21,5 @@ export type PaginationType = {
 export type getPaginationArgs = {
   total: number;
   show: number;
-  current: number;
+  current: number | undefined;
 };

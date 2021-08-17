@@ -17,22 +17,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "app-nav",
-  computed: {
-    links() {
-      const routes = this.$router.options.routes.filter(
-        (route) => route.meta?.inNav
-      );
+  setup() {
+    const router = useRouter();
+
+    const links = computed(() => {
+      const routes = router.options.routes.filter((route) => route.meta?.inNav);
       const neededRoutes = routes.map((item) => {
         item.path = item.path.replace(":page", "");
         return item;
       });
 
       return neededRoutes;
-    },
+    });
+
+    return { links };
   },
 });
 </script>

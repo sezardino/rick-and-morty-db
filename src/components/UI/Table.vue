@@ -5,13 +5,10 @@
       <thead class="table__head">
         <tr class="table__row table__row--head">
           <th class="table__data--empty"></th>
-          <th class="table__head-data">Photo</th>
-          <th class="table__head-data">Character ID</th>
-          <th class="table__head-data">Name</th>
-          <th class="table__head-data">Gender</th>
-          <th class="table__head-data">Species</th>
-          <th class="table__head-data">Last Episode</th>
-          <th class="table__head-data">Add To Favorites</th>
+
+          <th class="table__head-data" v-for="field in thFields" :key="field">
+            {{ field }}
+          </th>
           <th class="table__data--empty"></th>
         </tr>
       </thead>
@@ -71,21 +68,32 @@ export default defineComponent({
     emptyLabel: { type: String, required: true },
   },
   emits: ["addFavorite"],
+  setup(props) {
+    const thFields = [
+      "Photo",
+      "Character ID",
+      "Name",
+      "Gender",
+      "Species",
+      "Last Episode",
+      "Add To Favorites",
+    ];
 
-  methods: {
-    lastEpisode(episodes: Array<IEpisode>) {
+    const lastEpisode = (episodes: Array<IEpisode>) => {
       return getLastEpisode(episodes);
-    },
-    genderIcon(gender: string) {
+    };
+    const genderIcon = (gender: string) => {
       return gender.toLowerCase() + "-icon";
-    },
-    isFavorite(id: string) {
-      if (this.favorites!.find((item: any) => item.id === id)) {
+    };
+    const isFavorite = (id: string) => {
+      if (props.favorites!.find((item: any) => item.id === id)) {
         return true;
       } else {
         return false;
       }
-    },
+    };
+
+    return { thFields, lastEpisode, genderIcon, isFavorite };
   },
 });
 </script>

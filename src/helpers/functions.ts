@@ -127,11 +127,11 @@ export const getPagination = (args: getPaginationArgs) => {
         } else if (index === 1 || index + 1 === length - 1) {
           editToDotsItem(item);
         } else if (index === 3) {
-          editLabelAndValueItem(item, current);
+          editLabelAndValueItem(item, current!);
         } else if (index === 2) {
-          editLabelAndValueItem(item, current - 1);
+          editLabelAndValueItem(item, current! - 1);
         } else if (index === 4) {
-          editLabelAndValueItem(item, current + 1);
+          editLabelAndValueItem(item, current! + 1);
         }
       };
       break;

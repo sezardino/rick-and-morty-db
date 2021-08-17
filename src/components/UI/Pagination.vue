@@ -41,9 +41,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { getPagination } from "@/helpers/functions";
 import { PAGINATION_TYPE } from "@/helpers/const";
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   name: "my-pagination",
@@ -71,33 +72,36 @@ export default defineComponent({
       },
     },
   },
-  computed: {
-    pagination() {
+  setup(props) {
+    const route = useRoute();
+    const router = useRouter();
+
+    const current = computed(() => {
+      if (props.type === PAGINATION_TYPE.ROUTER) {
+        return +route.params.page;
+      } else {
+        return props.currentPage;
+      }
+    });
+    const pagination = computed(() => {
       const args = {
-        total: this.total as number,
-        show: this.show as number,
-        current: this.current as number,
+        total: props.total as number,
+        show: props.show as number,
+        current: current.value as number,
       };
 
       return getPagination(args);
-    },
-    current() {
-      if (this.type === PAGINATION_TYPE.ROUTER) {
-        return +this.$route.params.page;
-      } else {
-        return this.currentPage;
-      }
-    },
-  },
+    });
 
-  methods: {
-    clickHandler(index: number) {
-      if (this.type === PAGINATION_TYPE.ROUTER) {
-        const path = `/${this.linkPath ? this.linkPath + "/" : ""}${index}`;
-        this.$router.push(path);
+    const clickHandler = (index: number) => {
+      if (props.type === PAGINATION_TYPE.ROUTER) {
+        const path = `/${props.linkPath ? props.linkPath + "/" : ""}${index}`;
+        router.push(path);
       }
-      this.pageChangeHandler!(index);
-    },
+      props.pageChangeHandler!(index);
+    };
+
+    return { current, pagination, clickHandler };
   },
 });
 </script>

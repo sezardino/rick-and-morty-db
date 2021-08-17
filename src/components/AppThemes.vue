@@ -26,11 +26,12 @@ export default defineComponent({
   name: "app-themes",
   props: { themes: Array, current: { type: String, default: "default" } },
   emits: ["themeChange"],
+  setup(_, context) {
+    const clickHandler = (value: string) => {
+      context.emit("themeChange", value);
+    };
 
-  methods: {
-    clickHandler(value: string) {
-      this.$emit("themeChange", value);
-    },
+    return { clickHandler };
   },
 });
 </script>

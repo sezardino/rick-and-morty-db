@@ -10,7 +10,7 @@ const useFavorite = () => {
 
   const onMounted = async (page: string) => {
     try {
-      await store.dispatch("favorites/showPage", page);
+      await store.dispatch("favorites/init", page);
     } catch (error) {
       throw new Error(error);
     }

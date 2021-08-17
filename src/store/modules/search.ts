@@ -52,15 +52,6 @@ const search: Module<SearchStateTypes, IRootState> = {
     },
   },
   actions: {
-    async getCount({ commit, getters, rootGetters }) {
-      const query = getters.query;
-      const totalCount = await gqlApi.getSearchCount(query);
-
-      const pagesCount = Math.floor(totalCount / rootGetters["app/perPage"]);
-
-      commit("setTotalPages", pagesCount);
-    },
-
     async init({ commit, dispatch }, query) {
       commit("setCurrentPage", 1);
       commit("setTotalPages", 0);
@@ -82,6 +73,21 @@ const search: Module<SearchStateTypes, IRootState> = {
       commit("setItems", items);
     },
 
+    async changePageHandler({ commit, dispatch }, page) {
+      commit("setCurrentPage", page);
+
+      dispatch("showHandler");
+    },
+
+    async getCount({ commit, getters, rootGetters }) {
+      const query = getters.query;
+      const totalCount = await gqlApi.getSearchCount(query);
+
+      const pagesCount = Math.floor(totalCount / rootGetters["app/perPage"]);
+
+      commit("setTotalPages", pagesCount);
+    },
+
     getItems({ getters, rootGetters }, page) {
       const items = getItemsInRange(
         {
@@ -95,13 +101,7 @@ const search: Module<SearchStateTypes, IRootState> = {
       return items;
     },
 
-    async changePageHandler({ commit, dispatch }, page) {
-      commit("setCurrentPage", page);
-
-      dispatch("showHandler");
-    },
-
-    async showHandler({ commit, dispatch, getters, rootGetters }) {
+    async showHandler({ commit, dispatch, getters }) {
       const page = getters.currentPage;
       const items = await dispatch("getItems", page);
 

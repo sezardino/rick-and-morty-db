@@ -15,12 +15,7 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
   },
   mutations: {
     setItems(state, payload: any) {
-      if (payload.length === 0 || payload.length) {
-        state.items = [...state.items, ...payload];
-      } else {
-        const needed = payload as never;
-        state.items.push(needed);
-      }
+      state.items = payload;
     },
     setPageData(state, payload) {
       state.pageData = payload;
@@ -60,43 +55,38 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
     },
   },
   actions: {
-    async init({ dispatch, getters }) {
-      if (!getters.items.length) {
-        await dispatch("getCharacters");
+    async init({ dispatch, commit, getters }, page?: number) {
+      if (getters.items) {
+        commit("setCurrentPage", page);
+        await dispatch("getData");
+        await dispatch("getCount");
+        await dispatch("showHandler");
+      } else {
+        await dispatch("getData");
       }
     },
 
-    async getCharacters({ commit, rootGetters }) {
-      const favorites = await lsApi.getData("favorites");
-      const count = favorites.length;
+    getCount({ getters, commit, rootGetters }) {
+      const count = getters.items.length;
       const pagesCount = Math.ceil(count / rootGetters["app/perPage"]);
-
       commit("setTotalPages", pagesCount);
-      commit("setItems", favorites);
     },
 
-    showPage({ dispatch }, page) {
-      dispatch("currentPageChange", page);
+    async getData({ commit }) {
+      const favorites = await lsApi.getData("favorites");
+      console.log(favorites);
+      commit("setItems", favorites);
     },
 
     async changePageHandler({ commit, getters, dispatch }, page) {
       if (page > getters.totalPages) {
         return;
       }
-
       commit("setCurrentPage", page);
-
-      await dispatch("getCharacters", page);
-
-      dispatch("currentPageChangeHandler");
+      await dispatch("showHandler");
     },
 
-    async currentPageChange({ commit, dispatch }, page) {
-      commit("setCurrentPage", page);
-      dispatch("currentPageChangeHandler");
-    },
-
-    getItems({ getters, rootGetters }, page) {
+    prepareItemsForPage({ getters, rootGetters }, page) {
       const items = getItemsInRange(
         {
           page: page,
@@ -109,25 +99,31 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
       return items;
     },
 
-    async currentPageChangeHandler({ commit, dispatch, getters }) {
+    async showHandler({ commit, dispatch, getters }) {
       const page = getters.currentPage;
-      const items = await dispatch("getItems", page);
+      const items = await dispatch("prepareItemsForPage", page);
 
       commit("setPageData", items);
     },
 
-    saveData({ getters }) {
-      lsApi.saveData(getters.items, "favorites");
+    async removeFromFavorite({ commit, dispatch }, payload) {
+      commit("removeFavorite", payload);
+      await dispatch("saveData");
+      await dispatch("getData");
+      await dispatch("showHandler");
     },
 
-    favoriteHandler({ commit, dispatch, getters }, payload) {
+    async favoriteHandler({ commit, dispatch, getters }, payload) {
       if (getters.items.find((item: ICharacter) => item.id === payload.id)) {
-        commit("removeFavorite", payload);
+        await dispatch("removeFromFavorite", payload);
       } else {
         commit("addFavorite", payload);
+        await dispatch("saveData");
       }
+    },
 
-      dispatch("saveData");
+    saveData({ getters }) {
+      lsApi.saveData(getters.items, "favorites");
     },
   },
 };

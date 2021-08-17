@@ -27,6 +27,7 @@ export default defineComponent({
       await this.$store.dispatch("favorites/init");
       await this.$store.dispatch("app/getTheme");
     } catch (error) {
+      console.log(error);
       this.error = true;
     }
   },

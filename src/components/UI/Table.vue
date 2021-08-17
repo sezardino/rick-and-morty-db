@@ -12,7 +12,7 @@
           <th class="table__data--empty"></th>
         </tr>
       </thead>
-      <tbody class="table__body">
+      <transition-group tag="tbody" class="table__body" name="someName">
         <tr class="table__row" v-for="item in data" :key="item.id">
           <td class="table__data--empty"></td>
           <td class="table__data">
@@ -50,7 +50,7 @@
           </td>
           <td class="table__data--empty"></td>
         </tr>
-      </tbody>
+      </transition-group>
     </table>
   </div>
 </template>

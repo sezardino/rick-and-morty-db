@@ -9,7 +9,7 @@ export interface IRootState {
 }
 
 interface defaultState {
-  allItems: ICharacter[] | [];
+  items: ICharacter[] | [];
   pageData: ICharacter[] | [];
   currentPage: number;
   totalPages: number;
@@ -21,12 +21,7 @@ export interface AppStateTypes {
   theme: string;
 }
 
-export interface CharactersStateTypes {
-  all: ICharacter[] | [];
-  pageData: ICharacter[] | [];
-  currentPage: number;
-  totalPages: number;
-}
+export interface CharactersStateTypes extends defaultState {}
 export interface FavoritesStateTypes extends defaultState {}
 export interface SearchStateTypes extends defaultState {
   query: string;

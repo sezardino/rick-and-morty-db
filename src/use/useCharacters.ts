@@ -13,7 +13,7 @@ const useCharacters = () => {
   const pageData = computed(() => store.getters["characters/pageData"]);
   const currentPage = computed(() => store.getters["characters/currentPage"]);
   const totalPages = computed(() => store.getters["characters/totalPages"]);
-  const favorites = computed(() => store.getters["favorites/allItems"]);
+  const favorites = computed(() => store.getters["favorites/items"]);
   const paginationToShow = computed(
     () => store.getters["app/paginationToShow"]
   );

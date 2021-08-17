@@ -11,7 +11,7 @@ const useSearch = () => {
   const pageData = computed(() => store.getters["search/pageData"]);
   const currentPage = computed(() => store.getters["search/currentPage"]);
   const totalPages = computed(() => store.getters["search/totalPages"]);
-  const favorites = computed(() => store.getters["favorites/allItems"]);
+  const favorites = computed(() => store.getters["favorites/items"]);
   const paginationToShow = computed(
     () => store.getters["app/paginationToShow"]
   );

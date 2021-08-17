@@ -9,7 +9,7 @@ const useFavorite = () => {
   const store = useStore();
   const route = useRoute();
 
-  const favorites = computed(() => store.getters["favorites/allItems"]);
+  const favorites = computed(() => store.getters["favorites/items"]);
   const pageData = computed(() => store.getters["favorites/pageData"]);
   const currentPage = computed(() => store.getters["favorites/currentPage"]);
   const totalPages = computed(() => store.getters["favorites/totalPages"]);

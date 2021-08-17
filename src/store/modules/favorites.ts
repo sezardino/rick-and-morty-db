@@ -1,7 +1,5 @@
 import { Module } from "vuex";
-import { PER_PAGE } from "@/helpers/const";
 import {
-  ActionContextType,
   FavoritesStateTypes,
   IRootState,
 } from "../interfaces";
@@ -13,48 +11,49 @@ import lsApi from "@/api/ls";
 const favorites: Module<FavoritesStateTypes, IRootState> = {
   namespaced: true,
   state: {
-    allItems: [],
+    items: [],
     pageData: [],
     totalPages: 0,
     currentPage: 1,
   },
   mutations: {
-    allItems(state, payload: any) {
+    setItems(state, payload: any) {
       if (payload.length === 0 || payload.length) {
-        state.allItems = [...state.allItems, ...payload];
+        state.items = [...state.items, ...payload];
       } else {
         const needed = payload as never;
-        state.allItems.push(needed);
+        state.items.push(needed);
       }
     },
-    pageData(state, payload) {
+    setPageData(state, payload) {
       state.pageData = payload;
     },
-    totalPages(state, payload) {
+    setTotalPages(state, payload) {
       state.totalPages = payload;
     },
-    currentPage(state, payload) {
+    setCurrentPage(state, payload) {
       state.currentPage = payload;
     },
 
     addFavorite(state, payload: any) {
       if (payload.length) {
-        state.allItems = [...state.allItems, ...payload];
+        state.items = [...state.items, ...payload];
       } else {
         const needed = payload as never;
-        state.allItems.push(needed);
+        state.items.push(needed);
       }
     },
 
     removeFavorite(state, payload) {
-      state.allItems = state.allItems.filter((item) => item.id !== payload.id);
+      state.items = state.items.filter((item) => item.id !== payload.id);
     },
   },
   getters: {
-    allItems(state) {
-      return state.allItems;
+    items(state) {
+      return state.items;
     },
     pageData(state) {
+      console.log(state.pageData);
       return state.pageData;
     },
     totalPages(state) {
@@ -66,18 +65,18 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
   },
   actions: {
     async init({ commit, getters, rootGetters }) {
-      if (!getters.allItems.length) {
+      if (!getters.items.length) {
         const favorites = await lsApi.getData("favorites");
         const count = favorites.length;
-        const pagesCount = Math.floor(count / rootGetters["app/perPage"]);
+        const pagesCount = Math.ceil(count / rootGetters["app/perPage"]);
 
-        commit("totalPages", pagesCount);
-        commit("allItems", favorites);
+        commit("setTotalPages", pagesCount);
+        commit("setItems", favorites);
       }
     },
 
     async currentPageChange({ commit, dispatch }, page) {
-      commit("currentPage", page);
+      commit("setCurrentPage", page);
       dispatch("currentPageChangeHandler");
     },
 
@@ -86,7 +85,7 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
         {
           page: page,
           limit: rootGetters["app/perPage"],
-          items: getters.allItems,
+          items: getters.items,
         },
         true
       );
@@ -97,17 +96,16 @@ const favorites: Module<FavoritesStateTypes, IRootState> = {
     async currentPageChangeHandler({ commit, dispatch, getters }) {
       const page = getters.currentPage;
       const items = await dispatch("getItems", page);
-      console.log(items);
-      commit("pageData", items);
+
+      commit("setPageData", items);
     },
 
     saveData({ getters }) {
-      console.log(getters.allItems);
-      lsApi.saveData(getters.allItems, "favorites");
+      lsApi.saveData(getters.items, "favorites");
     },
 
     favoriteHandler({ commit, dispatch, getters }, payload) {
-      if (getters.allItems.find((item: ICharacter) => item.id === payload.id)) {
+      if (getters.items.find((item: ICharacter) => item.id === payload.id)) {
         commit("removeFavorite", payload);
       } else {
         commit("addFavorite", payload);

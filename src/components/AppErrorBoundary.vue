@@ -1,5 +1,8 @@
 <template>
-  <my-error v-if="error"></my-error>
+  <div class="error" v-if="error">
+    <h2 class="error__title">Something go's wrong, try to refresh page</h2>
+    <img src="@/assets/images/error.png" alt="error" class="error__img" />
+  </div>
   <slot v-else></slot>
 </template>
 

@@ -21,8 +21,8 @@ export interface AppStateTypes {
   theme: string;
 }
 
-export interface CharactersStateTypes extends defaultState {}
-export interface FavoritesStateTypes extends defaultState {}
+export type CharactersStateTypes = defaultState;
+export type FavoritesStateTypes = defaultState;
 export interface SearchStateTypes extends defaultState {
   query: string;
 }

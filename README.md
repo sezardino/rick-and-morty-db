@@ -1,3 +1,11 @@
 # Rick and Morty DataBase
 
-## Link https://sezardino-rick-and-morty.netlify.app/
+## Tech Stack
+
+- Vue
+- Vuex
+- Gsap
+- TypeScript
+- Composition API
+
+### Link https://sezardino-rick-and-morty.netlify.app/
